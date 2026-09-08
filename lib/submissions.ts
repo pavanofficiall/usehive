@@ -42,10 +42,12 @@ export async function saveSubmission(
   };
 
   // 1. Forward to Google Sheets Webhook (SheetDB or Google Apps Script)
+  const DEFAULT_SHEETS_URL = "https://sheetdb.io/api/v1/wmr37vebck4c6";
   const webhookUrl =
     process.env.GOOGLE_SHEET_WEBHOOK_URL ||
     process.env.GOOGLE_SHEETS_WEBHOOK_URL ||
-    process.env.WAITLIST_WEBHOOK_URL;
+    process.env.WAITLIST_WEBHOOK_URL ||
+    DEFAULT_SHEETS_URL;
 
   if (webhookUrl) {
     try {
