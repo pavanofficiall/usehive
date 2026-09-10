@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import "@fontsource/chakra-petch/latin-500.css";
 import "./globals.css";
 
+const GOOGLE_ANALYTICS_ID = "G-YD34N1NRVL";
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://brief-website.pavanom.chatgpt.site"),
   title: "Hive — Infrastructure for the Agentic Web",
@@ -45,7 +47,23 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        {children}
+        <script
+          async
+          src={`https://www.googletagmanager.com/gtag/js?id=${GOOGLE_ANALYTICS_ID}`}
+        />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', '${GOOGLE_ANALYTICS_ID}');
+            `,
+          }}
+        />
+      </body>
     </html>
   );
 }
