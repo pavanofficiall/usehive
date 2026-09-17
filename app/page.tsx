@@ -4,6 +4,7 @@ import ScrambleText from "@/components/ScrambleText";
 import { DesignPartnerDialog, FounderConversation } from "./hive-interactions";
 import { HiveMark, SiteFooter } from "./hive-brand";
 import { ProtocolStatement, SiteNav } from "./site-chrome";
+import { HeroVideoPlayer } from "@/components/HeroVideoPlayer";
 
 const humanStack = ["HTML", "Navigation", "Buttons", "Forms", "DOM", "JavaScript"];
 const agentContent = ["Products", "Pricing", "Docs", "FAQs"];
@@ -81,19 +82,10 @@ export default function Home() {
 
           <div className="hero-demo-wrap">
             <div className="video-card video-card--film" id="product-demo">
-              <video
-                autoPlay
-                muted
-                loop
-                playsInline
-                preload="metadata"
+              <HeroVideoPlayer
+                src="/videos/hive-opening.mp4"
                 poster="/og.png"
-                className="hive-demo-video h-full w-full object-cover"
-                aria-label="Hive product demo"
-              >
-                <source src="/videos/hive-opening.mp4" type="video/mp4" />
-                Your browser does not support embedded video.
-              </video>
+              />
             </div>
           </div>
         </div>
