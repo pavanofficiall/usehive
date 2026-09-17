@@ -80,17 +80,18 @@ export default function Home() {
           </div>
 
           <div className="hero-demo-wrap">
-            <div className="video-card" id="founder-video" aria-label="Founder video placeholder">
-              <div className="video-grid" aria-hidden="true" />
-              <div className="video-wordmark"><HiveMark /><span>HIVE</span></div>
-              <button className="play-button" type="button" aria-label="Founder video coming soon" disabled>
-                <span aria-hidden="true">▶</span>
-              </button>
-              <div className="video-meta">
-                <span className="eyebrow">Founder film</span>
-                <strong>Why we&apos;re building Hive</strong>
-                <small>2 min · Coming soon</small>
-              </div>
+            <div className="video-card video-card--film" id="product-demo">
+              <video
+                className="hive-demo-video"
+                controls
+                playsInline
+                preload="metadata"
+                poster="/og.png"
+                aria-label="Hive product demo"
+              >
+                <source src="/videos/hive-opening.mp4" type="video/mp4" />
+                Your browser does not support embedded video.
+              </video>
             </div>
           </div>
         </div>
