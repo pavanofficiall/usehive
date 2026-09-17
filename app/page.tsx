@@ -82,11 +82,13 @@ export default function Home() {
           <div className="hero-demo-wrap">
             <div className="video-card video-card--film" id="product-demo">
               <video
-                className="hive-demo-video"
-                controls
+                autoPlay
+                muted
+                loop
                 playsInline
                 preload="metadata"
                 poster="/og.png"
+                className="hive-demo-video h-full w-full object-cover"
                 aria-label="Hive product demo"
               >
                 <source src="/videos/hive-opening.mp4" type="video/mp4" />
