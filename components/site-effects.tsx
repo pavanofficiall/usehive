@@ -5,7 +5,9 @@ import { useCallback, useEffect, useState } from "react";
 
 import TextType from "@/components/reactbits/TextType";
 
-type Phase = "loading" | "leaving" | "done";
+const INTRO_SEEN_KEY = "hive:intro-seen";
+
+type Phase = "checking" | "loading" | "leaving" | "done";
 
 function loadImage(src: string): Promise<void> {
   return new Promise(resolve => {
@@ -19,24 +21,27 @@ function loadImage(src: string): Promise<void> {
 
 export function SiteEffects() {
   const pathname = usePathname();
-  const [phase, setPhase] = useState<Phase>("loading");
+  const [phase, setPhase] = useState<Phase>("checking");
 
   const [assetsReady, setAssetsReady] = useState(false);
   const [typed, setTyped] = useState(false);
   const finishTyping = useCallback(() => setTyped(true), []);
   useEffect(() => {
-    if (!assetsReady || !typed) return;
+    if (phase !== "loading" || !assetsReady || !typed) return;
     const hold = window.setTimeout(() => setPhase("leaving"), 2000);
     return () => window.clearTimeout(hold);
-  }, [assetsReady, typed]);
+  }, [assetsReady, typed, phase]);
 
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    let seen = false;
+    try { seen = sessionStorage.getItem(INTRO_SEEN_KEY) === "true"; } catch { /* Storage can be unavailable in private browsers. */ }
+    if (seen || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       document.documentElement.dataset.hiveIntroReady = "true";
       window.dispatchEvent(new Event("hive:intro-ready"));
       setPhase("done");
       return;
     }
+    setPhase("loading");
     let cancelled = false;
     const previousOverflow = document.documentElement.style.overflow;
     document.documentElement.style.overflow = "hidden";
@@ -55,6 +60,7 @@ export function SiteEffects() {
 
   useEffect(() => {
     if (phase !== "leaving") return;
+    try { sessionStorage.setItem(INTRO_SEEN_KEY, "true"); } catch { /* Continue when browser storage is blocked. */ }
     const readyTimer = window.setTimeout(() => {
       document.documentElement.dataset.hiveIntroReady = "true";
       window.dispatchEvent(new Event("hive:intro-ready"));
@@ -82,7 +88,7 @@ export function SiteEffects() {
     return () => observer.disconnect();
   }, [pathname]);
 
-  if (phase === "done") return null;
+  if (phase === "checking" || phase === "done") return null;
   return <div className={phase === "leaving" ? "intro-loader leaving" : "intro-loader"} role="status" aria-label="Loading HIVE">
     <div className="intro-tagline" aria-label="On a mission to change human web into agentic.">
       <TextType text="On a mission to change human web into agentic." typingSpeed={55} initialDelay={50} loop={false} cursorCharacter="▏" onSentenceComplete={finishTyping} aria-hidden="true"/>
