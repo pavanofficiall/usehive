@@ -36,6 +36,7 @@ export function SiteEffects() {
     let seen = false;
     try { seen = sessionStorage.getItem(INTRO_SEEN_KEY) === "true"; } catch { /* Storage can be unavailable in private browsers. */ }
     if (seen || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      delete document.documentElement.dataset.hiveIntro;
       document.documentElement.dataset.hiveIntroReady = "true";
       window.dispatchEvent(new Event("hive:intro-ready"));
       setPhase("done");
@@ -57,6 +58,13 @@ export function SiteEffects() {
       document.documentElement.style.overflow = previousOverflow;
     };
   }, []);
+
+  useEffect(() => {
+    if (phase === "loading") {
+      // This runs after React has mounted the intro overlay.
+      document.documentElement.dataset.hiveIntro = "active";
+    }
+  }, [phase]);
 
   useEffect(() => {
     if (phase !== "leaving") return;
