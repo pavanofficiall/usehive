@@ -82,3 +82,16 @@ html{background:#080d15;overscroll-behavior-y:none}body{overscroll-behavior-y:no
 }
 .site-header nav{display:flex;align-items:center;gap:clamp(18px,2.4vw,36px)}
 @media(max-width:430px){.site-header nav{gap:16px}.site-header nav a{font-size:12px}}
+
+/* Keep footer content below the sky transition and let the E's bottom stroke show. */
+.home-shell .site-footer{padding-top:340px}
+.footer-main .footer-logo>img{width:76px;height:auto}
+@media(max-width:700px){
+  .home-shell .site-footer{padding-top:320px}
+  .footer-main .footer-logo>img{width:68px;height:auto}
+}
+@media(max-width:600px){
+  .footer-wordmark{height:26vw;min-height:94px}
+  .footer-wordmark-mobile{width:90%;transform:translateY(-5%)}
+}
+@media(prefers-reduced-motion:reduce){.footer-wordmark-text{transform:translateY(4%)!important}}

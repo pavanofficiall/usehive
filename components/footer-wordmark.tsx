@@ -12,7 +12,7 @@ export function FooterWordmark() {
     gsap.registerPlugin(ScrollTrigger);
     const context = gsap.context(() => {
       if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-      gsap.fromTo(".footer-wordmark-text", { yPercent: 65 }, { yPercent: 20, ease: "none", scrollTrigger: { trigger: ref.current, start: "top bottom", end: "bottom bottom", scrub: .5 } });
+      gsap.fromTo(".footer-wordmark-text", { yPercent: 55 }, { yPercent: 4, ease: "none", scrollTrigger: { trigger: ref.current, start: "top bottom", end: "bottom bottom", scrub: .5 } });
     }, ref);
     return () => context.revert();
   }, [phone]);

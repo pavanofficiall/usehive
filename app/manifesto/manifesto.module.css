@@ -120,7 +120,7 @@
 .appendix li::before { content: counter(note, decimal-leading-zero) "."; color: #a3c8de; font-size: 12px; letter-spacing: .1em; padding-top: 4px; }
 
 .page :global(.reveal) { transition-duration: .9s; transition-timing-function: cubic-bezier(.2,.7,.2,1); }
-.page :global(.site-footer) { border-top: 0; background: linear-gradient(180deg, #080d15 0%, #080d15b8 20%, transparent 60%), url('/blue-sky.jpg') center bottom / cover no-repeat; padding-top: 230px; color: #08243a; }
+.page :global(.site-footer) { border-top: 0; background: linear-gradient(180deg, #080d15 0%, #080d15b8 20%, transparent 60%), url('/blue-sky.jpg') center bottom / cover no-repeat; padding-top: 390px; color: #08243a; }
 .page :global(.site-footer .footer-main a), .page :global(.site-footer .social-label) { color: #092b43; }
 .page :global(.site-footer .footer-main > div > span:first-child), .page :global(.site-footer .footer-main > div > span:first-child .footer-blur) { color: #153a53; }
 .page :global(.site-footer .footer-logo > img) { filter: none; }
@@ -130,6 +130,7 @@
 
 
 @media (max-width: 760px) {
+  .page :global(.site-footer) { padding-top: 330px; }
   .header { padding: 24px; }
   .headerIndex { font-size: 9px; }
   .hero { min-height: 90svh; padding: 140px 20px 90px; }
