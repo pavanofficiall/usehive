@@ -15,7 +15,7 @@ On Vercel, add the same variables in Project Settings → Environment Variables 
 
 - LinkedIn and X are connected. Add the Discord invite URL in `components/site-chrome.tsx` when available.
 - The original Arial/Helvetica typography is restored while the final font is undecided. The font picker is hidden.
-- Set `NEXT_PUBLIC_CLI_COMMAND` to the confirmed install command. Its current provisional value is `npm i hive`.
+- The hero copies the published command `npx @usehive/cli scan --install` and offers an agent prompt.
 
 The uploaded background, logo, and demo video are in `public/`.
 
@@ -29,6 +29,6 @@ The optional font experiments remain self-hosted, with licenses in `public/fonts
 
 The intro uses React Bits TextType for the mission tagline. The hero and footer use BlurText; narrative and journal text use ScrollReveal. CircularText surrounds the footer logo. The glowing pointer is a local SVG cursor, enabled for mouse/trackpad devices.
 
-Copying the CLI command opens the beta email form with the 500k-token launch offer. The form writes to the existing Supabase waitlist endpoint; it reports an error rather than claiming success while Supabase is unconfigured.
+Copying the CLI command opens the beta email form with the 500k-token launch offer. The form writes to the same SheetDB/Google Sheet used by the `main` site, then mirrors the signup to Supabase for the V2 admin beta list when configured. Set `GOOGLE_SHEET_WEBHOOK_URL` in Vercel to the same value as `main` if its sheet destination changes. A failed sheet write reports an error instead of claiming success. Verify one real signup appears in the sheet before moving the production domain.
 
 Replace `public/concept-build.jpg` and `public/concept-sync.jpg` with final card images. Current placeholders reuse the supplied demo still and sky image. The footer uses the sky with a dark gradient transition, and page overscroll is disabled.
