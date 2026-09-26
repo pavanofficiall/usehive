@@ -80,3 +80,5 @@ html{background:#080d15;overscroll-behavior-y:none}body{overscroll-behavior-y:no
   .footer-wordmark-mobile{display:block;flex:none;width:84%;height:auto;overflow:visible;color:#0a2840;transform:translateY(10%)}
   .site-shell:not(.home-shell) .footer-wordmark-mobile{color:#bddbf0}
 }
+.site-header nav{display:flex;align-items:center;gap:clamp(18px,2.4vw,36px)}
+@media(max-width:430px){.site-header nav{gap:16px}.site-header nav a{font-size:12px}}

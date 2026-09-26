@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import { SiteFooter } from "@/components/site-chrome";
 import styles from "./manifesto.module.css";
 
 export const metadata: Metadata = {
@@ -24,7 +25,11 @@ export default function ManifestoPage() {
           <Image src="/hivelogo.svg" alt="" width={30} height={30} />
           <span>HIVE</span>
         </a>
-        <span className={styles.headerIndex}>manifesto / 2026</span>
+        <nav className={styles.headerNav} aria-label="Main navigation">
+          <a href="/">Home</a>
+          <a href="/blog">Blog</a>
+          <span aria-current="page">Manifesto</span>
+        </nav>
       </header>
 
       <section className={styles.hero} aria-labelledby="manifesto-title">
@@ -117,6 +122,7 @@ export default function ManifestoPage() {
           </ol>
         </div>
       </section>
+      <SiteFooter />
     </main>
   );
 }
