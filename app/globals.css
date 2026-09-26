@@ -95,3 +95,15 @@ html{background:#080d15;overscroll-behavior-y:none}body{overscroll-behavior-y:no
   .footer-wordmark-mobile{width:90%;transform:translateY(-5%)}
 }
 @media(prefers-reduced-motion:reduce){.footer-wordmark-text{transform:translateY(4%)!important}}
+
+/* Published CLI actions */
+.cli-install{width:min(760px,100%)}
+.cli-actions{display:flex;align-items:stretch;justify-content:center;gap:12px}
+.cli-copy-row{flex:1;min-width:0;gap:10px}
+.cli-copy-row code{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:13px}
+.agent-copy-button{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:58px;padding:0 20px;border:1px solid #0e344e99;border-radius:999px;background:#dceffc;color:#082235;box-shadow:0 12px 30px #0e426130;font-size:13px;font-weight:700;white-space:nowrap}
+.agent-copy-button:hover{background:#f0f9ff}
+.cli-docs-link{display:inline-flex;align-items:center;gap:5px;margin-top:14px;color:#123e5b;font-size:13px;font-weight:600}
+.cli-docs-link:hover{color:#061c2d}
+@media(max-width:700px){.cli-actions{flex-direction:column;align-items:stretch}.cli-copy-row{width:100%}.agent-copy-button{min-height:48px}.cli-copy-row code{font-size:12px}}
+@media(max-width:390px){.cli-copy-row{gap:6px;padding-left:15px}.cli-copy-row button{padding:0 10px}.cli-copy-row button svg{display:none}}

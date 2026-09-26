@@ -28,7 +28,7 @@ export default function Home() {
             <span className="hero-title-line"><BlurText text="Build your MCP layer." play={introReady} delay={45} stepDuration={0.22} animationFrom={{ filter: "blur(22px)", opacity: 0, y: 28 }} animationTo={[{ filter: "blur(11px)", opacity: 0.45, y: 8 }, { filter: "blur(0px)", opacity: 1, y: 0 }]}/></span>
             <span className="hero-title-line hero-title-italic"><BlurText text="Keep it in sync." play={introReady} delay={55} stepDuration={0.25} animationFrom={{ filter: "blur(24px)", opacity: 0, y: 32 }} animationTo={[{ filter: "blur(12px)", opacity: 0.4, y: 9 }, { filter: "blur(0px)", opacity: 1, y: 0 }]}/></span>
           </h1>
-          <p className={introReady ? "hero-copy hero-copy-ready" : "hero-copy"}>A developer CLI to build a production ready MCP layer for your product, then keep it current as the product changes.</p>
+          <p className={introReady ? "hero-copy hero-copy-ready" : "hero-copy"}>Scan your Next.js app, review its capabilities, and generate a local MCP server that works with your existing APIs.</p>
           <CliCopy ready={introReady}/>
         </div>
         <DemoScroll/>

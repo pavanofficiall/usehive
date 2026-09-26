@@ -1,28 +1,45 @@
 "use client";
+
 import { useState } from "react";
-import { Check, Copy } from "lucide-react";
-import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
+import { ArrowUpRight, Check, Copy } from "lucide-react";
+import { copyText } from "@/components/copy-text";
+
+const command = "npx @usehive/cli scan --install";
+const agentPrompt = `Work in the root of this project. First confirm that it is a TypeScript Next.js App Router app and that Node.js is at least 22.12.0. Run ${command}. Review the detected capabilities with me: explain what each selected tool can do, and ask before approving any write or destructive capability. After generation, use .hive/mcp/.env.example to configure .hive/mcp/.env with the application's local URL and only credentials I provide. Start the app normally, then run npm run hive:mcp (or npx @usehive/cli dev if the script was not added). Run npx @usehive/cli doctor and report how to connect a local MCP client to http://127.0.0.1:3333/mcp. Never print or commit secret values.`;
+
 export function CliCopy({ ready }: { ready: boolean }) {
-  const [copied, setCopied] = useState(false), [failed, setFailed] = useState(false);
-  const [open, setOpen] = useState(false), [email, setEmail] = useState("");
-  const [sending, setSending] = useState(false), [joined, setJoined] = useState(false), [error, setError] = useState("");
-  const command = process.env.NEXT_PUBLIC_CLI_COMMAND || "npm i hive";
-  async function copy() {
-    try { await navigator.clipboard.writeText(command); setCopied(true); setFailed(false); setOpen(true); setTimeout(() => setCopied(false), 2000); }
-    catch { setFailed(true); }
-  }
-  async function join(event: React.FormEvent) {
-    event.preventDefault(); setSending(true); setError("");
+  const [copied, setCopied] = useState<"command" | "agent" | null>(null);
+  const [error, setError] = useState(false);
+
+  async function copy(value: string, kind: "command" | "agent") {
     try {
-      const response = await fetch("/api/waitlist", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email }) });
-      const data = await response.json() as { error?: string; joined?: boolean };
-      if (!response.ok || !data.joined) throw new Error(data.error || "Could not join right now. Please try again.");
-      setJoined(true);
-    } catch (err) { setError(err instanceof Error ? err.message : "Could not join right now. Please try again."); }
-    finally { setSending(false); }
+      if (!await copyText(value)) throw new Error("Clipboard unavailable");
+      setCopied(kind);
+      setError(false);
+      window.setTimeout(() => setCopied(current => current === kind ? null : current), 2200);
+    } catch {
+      setError(true);
+    }
   }
-  return <><div className={`cli-install ${ready ? "cli-ready" : ""}`}><div className="cli-copy-row"><span aria-hidden="true">$</span><code>{command}</code><button className="laser-copy" type="button" onClick={copy} aria-label={copied ? "Command copied" : "Copy CLI install command"}>{copied ? <Check size={18}/> : <Copy size={18}/>}<span>{copied ? "Copied" : "Copy"}</span></button></div><span className="sr-only" role="status">{copied ? "Install command copied" : failed ? "Could not access clipboard. Select and copy the command." : ""}</span></div>
-    <Dialog open={open} onOpenChange={setOpen}><DialogContent className="beta-dialog"><span className="beta-kicker">HIVE BETA</span><DialogTitle>{joined ? "You’re on the list." : "Build with us."}</DialogTitle><DialogDescription>{joined ? "We’ll email you when HIVE goes live." : "Join the beta list and get 500k tokens when we go live."}</DialogDescription>{!joined && <form onSubmit={join} className="beta-form"><label htmlFor="beta-email">Your email</label><Input id="beta-email" type="email" autoComplete="email" placeholder="you@example.com" required maxLength={254} value={email} onChange={event => setEmail(event.target.value)}/><button type="submit" disabled={sending}>{sending ? "Joining…" : "Join beta list"}</button>{error && <p role="alert">{error}</p>}</form>}</DialogContent></Dialog>
-  </>;
+
+  return (
+    <div className={`cli-install ${ready ? "cli-ready" : ""}`}>
+      <div className="cli-actions">
+        <div className="cli-copy-row">
+          <span aria-hidden="true">$</span>
+          <code>{command}</code>
+          <button className="laser-copy" type="button" onClick={() => copy(command, "command")} aria-label="Copy HIVE CLI command">
+            {copied === "command" ? <Check size={17} /> : <Copy size={17} />}
+            <span>{copied === "command" ? "Copied" : "Copy"}</span>
+          </button>
+        </div>
+        <button className="agent-copy-button" type="button" onClick={() => copy(agentPrompt, "agent")}>
+          {copied === "agent" ? <Check size={17} /> : <Copy size={17} />}
+          <span>{copied === "agent" ? "Copied for agent" : "Copy for agent"}</span>
+        </button>
+      </div>
+      <a className="cli-docs-link" href="/docs">Read the CLI docs <ArrowUpRight size={14} /></a>
+      <span className="sr-only" role="status">{error ? "Clipboard unavailable. Select and copy the text instead." : copied === "agent" ? "Agent prompt copied" : copied === "command" ? "CLI command copied" : ""}</span>
+    </div>
+  );
 }

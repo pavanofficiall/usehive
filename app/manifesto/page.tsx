@@ -27,6 +27,7 @@ export default function ManifestoPage() {
         </a>
         <nav className={styles.headerNav} aria-label="Main navigation">
           <a href="/">Home</a>
+          <a href="/docs">Docs</a>
           <a href="/blog">Blog</a>
           <span aria-current="page">Manifesto</span>
         </nav>
