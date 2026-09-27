@@ -1,13 +1,11 @@
-import Image from "next/image";
-import Link from "next/link";
-import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
 import { DocsCode } from "@/components/docs-code";
+import { DocsShell } from "./docs-shell";
 import styles from "./docs.module.css";
 
 export const docPages = [
-  { slug: "", title: "Get started", description: "Scan your app, review its capabilities, and run a local MCP server." },
-  { slug: "configuration", title: "Configuration", description: "Point the generated server at your application and connect a local MCP client." },
-  { slug: "commands", title: "CLI reference", description: "The commands you need to inspect, generate, run, and re-scan." },
+  { slug: "", title: "Get started", description: "Scan your app, review its capabilities, and run a local MCP server.", searchText: "requirements Node.js TypeScript Next.js App Router dry-run scan install npm run hive:mcp generated server" },
+  { slug: "configuration", title: "Configuration", description: "Point the generated server at your application and connect a local MCP client.", searchText: "environment .env HIVE_APP_BASE_URL HIVE_MCP_PORT application auth bearer token cookie HIVE_FORWARD_AUTH HIVE_MCP_TOKEN doctor Streamable HTTP endpoint" },
+  { slug: "commands", title: "CLI reference", description: "The commands you need to inspect, generate, run, and re-scan.", searchText: "scan dry-run install read-only json select no-script generate inspect dev stdio doctor re-scan current scope" },
 ] as const;
 
 type PageSlug = (typeof docPages)[number]["slug"];
@@ -54,28 +52,7 @@ function Commands() {
 }
 
 export function DocsPage({ slug }: { slug: PageSlug }) {
-  const index = docPages.findIndex(page => page.slug === slug);
-  const current = docPages[index];
-  const previous = docPages[index - 1];
-  const next = docPages[index + 1];
-
-  return <main className={styles.page}>
-    <header className={styles.header}>
-      <Link className={styles.brand} href="/docs" aria-label="HIVE CLI docs home"><Image src="/hivelogo.svg" alt="" width={28} height={30} /><span>HIVE <em>CLI Docs</em></span></Link>
-      <Link className={styles.homeLink} href="/"><ArrowLeft size={15} /> Back to home</Link>
-    </header>
-    <div className={styles.layout}>
-      <aside className={styles.sidebar}><span className={styles.sidebarLabel}>DOCUMENTATION</span><nav aria-label="Documentation pages">{docPages.map((page, pageIndex) => <Link key={page.slug} href={page.slug ? `/docs/${page.slug}` : "/docs"} aria-current={page.slug === slug ? "page" : undefined}><span>{String(pageIndex + 1).padStart(2, "0")}</span>{page.title}</Link>)}</nav><a className={styles.npmLink} href="https://www.npmjs.com/package/@usehive/cli" target="_blank" rel="noopener noreferrer">View on npm <ArrowUpRight size={14} /></a></aside>
-      <article className={styles.article}>
-        <div className={styles.kicker}>HIVE CLI / {String(index + 1).padStart(2, "0")}</div>
-        <h1>{current.title}</h1>
-        <p className={styles.lead}>{current.description}</p>
-        {slug === "" ? <GetStarted /> : slug === "configuration" ? <Configuration /> : <Commands />}
-        <nav className={styles.pager} aria-label="Documentation pagination">
-          {previous ? <Link href={previous.slug ? `/docs/${previous.slug}` : "/docs"}><ArrowLeft size={18} /><span><small>Previous</small>{previous.title}</span></Link> : <span />}
-          {next ? <Link href={`/docs/${next.slug}`}><span><small>Next</small>{next.title}</span><ArrowRight size={18} /></Link> : <span />}
-        </nav>
-      </article>
-    </div>
-  </main>;
+  return <DocsShell pages={docPages} slug={slug}>
+    {slug === "" ? <GetStarted /> : slug === "configuration" ? <Configuration /> : <Commands />}
+  </DocsShell>;
 }
