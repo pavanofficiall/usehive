@@ -8,5 +8,5 @@ export const dynamic = "force-dynamic";
 export default async function BlogPage() {
   let pinned = null, data = { posts: [] as Awaited<ReturnType<typeof publicPostPage>>["posts"], hasMore: false }, failed = false;
   try { [pinned, data] = await Promise.all([publicPinnedPost(), publicPostPage()]); } catch { failed = true; }
-  return <main className="site-shell journal-shell"><SiteHeader/><div className="journal-page"><header className="journal-intro"><span>THE HIVE JOURNAL</span><h1>Ideas in motion.</h1></header>{failed && <p role="status">Stories are temporarily unavailable.</p>}{pinned && <PostCard post={pinned} featured/>}<BlogFeed initialPosts={data.posts} initialHasMore={data.hasMore}/></div><SiteFooter/></main>;
+  return <main className="site-shell journal-shell"><SiteHeader/><div className="journal-page"><header className="journal-intro"><span>Ideas in motion.</span><h1>not a single blog is ai written</h1></header>{failed && <p role="status">Stories are temporarily unavailable.</p>}{pinned && <PostCard post={pinned} featured/>}<BlogFeed initialPosts={data.posts} initialHasMore={data.hasMore}/></div><SiteFooter/></main>;
 }
