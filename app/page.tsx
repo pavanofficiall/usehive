@@ -42,11 +42,11 @@ export default function Home() {
             One MCP layer. Built to keep up.
           </ScrollReveal>
           <div className="concept-row">
-            <div className="concept-image reveal"><img src="/concept-build.jpg" alt="HIVE CLI demo still" width={1280} height={720} loading="lazy"/></div>
+            <div className="concept-image reveal" style={{ aspectRatio: "1.91" }}><img src="/concept-build.jpg" alt="Pink and orange gradient" width={2084} height={1086} loading="lazy"/></div>
             <div className="concept-copy"><ScrollText as="span" className="concept-kicker">BUILD</ScrollText><ScrollText as="h3">Start with the product you already have.</ScrollText><ScrollText as="p">HIVE helps developers create a production ready MCP server or layer through a CLI, so AI clients can work with the product.</ScrollText></div>
           </div>
           <div className="concept-row concept-row-reverse">
-            <div className="concept-image reveal"><img src="/concept-sync.jpg" alt="Blue sky texture" width={1280} height={720} loading="lazy"/></div>
+            <div className="concept-image reveal" style={{ aspectRatio: "1.91" }}><img src="/concept-sync.jpg" alt="Orange, pink, and violet gradient" width={2082} height={1090} loading="lazy"/></div>
             <div className="concept-copy"><ScrollText as="span" className="concept-kicker">STAY CURRENT</ScrollText><ScrollText as="h3">Ship changes without leaving the layer behind.</ScrollText><ScrollText as="p">As your product changes, HIVE keeps the MCP layer in sync. The interface developers and agents use stays aligned with what your product can do.</ScrollText></div>
           </div>
         </div>

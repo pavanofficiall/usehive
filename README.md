@@ -31,4 +31,4 @@ The intro uses React Bits TextType for the mission tagline. The hero and footer 
 
 Copying the CLI command opens the beta email form with the 500k-token launch offer. The form writes to the same SheetDB/Google Sheet used by the `main` site, then mirrors the signup to Supabase for the V2 admin beta list when configured. Set `GOOGLE_SHEET_WEBHOOK_URL` in Vercel to the same value as `main` if its sheet destination changes. A failed sheet write reports an error instead of claiming success. Verify one real signup appears in the sheet before moving the production domain.
 
-Replace `public/concept-build.jpg` and `public/concept-sync.jpg` with final card images. Current placeholders reuse the supplied demo still and sky image. The footer uses the sky with a dark gradient transition, and page overscroll is disabled.
+The two THE IDEA cards use the supplied pink and orange gradient images. The footer uses the sky with a dark gradient transition, and page overscroll is disabled.
