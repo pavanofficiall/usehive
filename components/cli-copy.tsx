@@ -70,18 +70,18 @@ export function CliCopy({ ready }: { ready: boolean }) {
       <span className="sr-only" role="status">{error ? "Clipboard unavailable. Select and copy the text instead." : copied === "agent" ? "Agent prompt copied" : copied === "command" ? "CLI command copied" : ""}</span>
       <Dialog open={betaOpen} onOpenChange={setBetaOpen}>
         <DialogContent className="beta-dialog">
-          <DialogHeader>
-            <span className="beta-kicker">HIVE CLI IS LIVE IN BETA</span>
-            <DialogTitle>Get 500k tokens at v1 launch.</DialogTitle>
-            <DialogDescription>HIVE v1 will include a free tier. Join the list now to receive 500k tokens when v1 launches.</DialogDescription>
+          <DialogHeader className="beta-banner">
+            <span className="beta-kicker">HIVE CLI BETA</span>
+            <DialogTitle>Join the beta list.</DialogTitle>
+            <DialogDescription>Get 500k tokens when v1 launches.</DialogDescription>
           </DialogHeader>
           {betaStatus === "joined" ? (
-            <p role="status">You&apos;re on the launch list. We&apos;ll email you when v1 is ready.</p>
+            <p className="beta-success" role="status">You&apos;re on the beta list. We&apos;ll email you when v1 is ready.</p>
           ) : (
             <form className="beta-form" onSubmit={joinBeta}>
               <label htmlFor="beta-email">Your email</label>
               <input id="beta-email" type="email" autoComplete="email" required maxLength={254} value={email} onChange={event => setEmail(event.target.value)} placeholder="you@company.com" />
-              <button type="submit" disabled={betaStatus === "saving"}>{betaStatus === "saving" ? "Joining..." : "Join launch list"}</button>
+              <button type="submit" disabled={betaStatus === "saving"}>{betaStatus === "saving" ? "Joining..." : "Join beta list"}</button>
               {betaError && <p role="alert">{betaError}</p>}
             </form>
           )}
