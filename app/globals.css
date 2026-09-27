@@ -71,6 +71,25 @@ body{font-family:var(--font-site);font-weight:400}button,input,textarea,select{f
 .beta-form{margin:0;padding:28px 34px 34px}
 .beta-dialog .beta-success{padding:30px 34px;color:#e8f3fb;font-size:15px;line-height:1.5}
 @media(max-width:480px){.beta-banner{min-height:216px;padding:28px}.beta-form{padding:26px 28px 30px}.beta-dialog .beta-success{padding:26px 28px}}
+.waitlist-dialog{max-width:min(590px,calc(100vw - 28px))!important;background:#0b111b;border:1px solid #8798ae4d;box-shadow:0 24px 90px #0009}
+.waitlist1{width:100%;overflow:hidden}
+.waitlist1-art{height:190px;background:#f6dcfb url('/beta-launch-gradient.jpg') center/cover no-repeat}
+.waitlist1-content{padding:34px 42px 42px;text-align:center}
+.waitlist1-header{align-items:center;text-align:center!important;gap:10px}
+.waitlist1-eyebrow{font:11px var(--font-mono);letter-spacing:.16em;color:#9ec9e3}
+.waitlist-dialog .waitlist1-header [data-slot=dialog-title]{font-size:clamp(32px,5vw,43px);font-weight:600;line-height:1.1;letter-spacing:-.055em;color:#f0f6fc}
+.waitlist-dialog .waitlist1-header [data-slot=dialog-description]{font-size:16px;line-height:1.5;color:#b1c2d3}
+.waitlist1-form{display:flex;gap:9px;margin-top:29px;flex-wrap:wrap}
+.waitlist1-form input{min-width:0;flex:1 1 210px;height:48px;border:1px solid #8296aa75;border-radius:11px;background:#151f2b;padding:0 15px;color:#f5faff;font-size:15px}
+.waitlist1-form input::placeholder{color:#8d9eaf}
+.waitlist1-form input:focus-visible{outline:2px solid #b7dfff;outline-offset:2px}
+.waitlist1-form button{min-height:48px;border:0;border-radius:11px;background:#c5e7fb;color:#102438;padding:0 18px;font-size:14px;font-weight:650;white-space:nowrap;cursor:pointer}
+.waitlist1-form button:hover{background:#e2f3ff}
+.waitlist1-form button:disabled{opacity:.6;cursor:wait}
+.waitlist1-error{flex-basis:100%;margin:4px 0 0;color:#efbfbf;text-align:left;font-size:13px}
+.waitlist1-success{margin:27px 0 0;color:#d6e9f5;line-height:1.5}
+.waitlist-dialog [data-slot=dialog-close]{top:16px;right:16px}
+@media(max-width:520px){.waitlist1-art{height:155px}.waitlist1-content{padding:28px 24px 32px}.waitlist1-form{flex-direction:column}.waitlist1-form input{flex-basis:auto;width:100%}.waitlist1-form button{width:100%}}
 .concept-image{margin:0;border:1px solid #55768b55;border-radius:20px;overflow:hidden;background:#071015;box-shadow:0 24px 70px #02070d55;aspect-ratio:1.35;filter:blur(16px);transition:opacity .8s ease,filter .8s ease,transform .8s ease}.concept-image img{display:block;width:100%;height:100%;object-fit:cover}.concept-row-reverse .concept-image{order:2}
 html{background:#080d15;overscroll-behavior-y:none}body{overscroll-behavior-y:none}.sky-backdrop{bottom:auto;height:100svh}.home-shell{max-width:none}.home-shell .idea-section{background:linear-gradient(180deg,#0c1b29,#080d15 80%)}.home-shell .site-footer{position:relative;isolation:isolate;border-top:0;box-shadow:none;background:#132b42 url('/blue-sky.jpg') center bottom/cover no-repeat;padding-top:150px;color:#08243a}.home-shell .site-footer:before{content:"";position:absolute;inset:0;z-index:-1;width:auto;height:auto;filter:none;box-shadow:none;background:linear-gradient(180deg,#080d15 0%,#080d15f5 5%,#080d15bd 14%,#080d1560 25%,#080d1512 40%,transparent 55%)}.home-shell .footer-main{padding-top:80px}.home-shell .footer-main a,.home-shell .footer-main .social-label{color:#092b43}.home-shell .footer-main>div>span:first-child,.home-shell .footer-main>div>span:first-child .footer-blur{color:#153a53}.home-shell .footer-logo>img{filter:none}.home-shell .footer-main .footer-circle>span{color:#103852}.home-shell .footer-bottom{border-color:#153c5650;color:#153750}.home-shell .footer-wordmark-text{color:#0a2840}.home-shell .footer-main a:hover{color:#000}
 @media(max-width:700px){.concept-row-reverse .concept-image{order:initial}.concept-image{aspect-ratio:1.4}.home-shell .site-footer{padding-top:110px}.home-shell .footer-main{padding-top:70px}}@media(prefers-reduced-motion:reduce){.laser-copy:before{animation:none}.concept-image{filter:none;opacity:1;transform:none}}
