@@ -105,6 +105,13 @@ body{font-family:var(--font-site);font-weight:400}button,input,textarea,select{f
 .article-body figure{margin:32px 0 42px}.article-body figure img{display:block;width:100%;height:auto;border-radius:12px}.article-body figcaption{color:#9baebe;font-size:13px;margin-top:9px}
 .article-body blockquote{border-left:2px solid #9ecfee;padding-left:20px;color:#c7dbe9;margin:24px 0}
 .article-body code{background:#1b2936;border-radius:4px;padding:2px 5px;font-size:.85em}.article-body pre{background:#111d28;border:1px solid #344b5d;border-radius:10px;padding:20px;overflow-x:auto;margin:22px 0 32px}.article-body pre code{background:none;padding:0}
+.article-embed{width:100%;max-width:800px;margin:32px 0 40px;border:1px solid #486277;border-radius:14px;background:#0c1520;overflow:hidden}
+.article-embed-video{aspect-ratio:16/9;background:#05090e}.article-embed-video iframe{display:block;width:100%;height:100%;border:0}
+.article-embed-post{display:block;width:100%;height:620px;border:0;background:#101820}
+.article-embed-x-content{display:flex;justify-content:center;padding:18px}.article-embed-x-content .twitter-tweet{width:100%;max-width:550px}
+.article-embed-load{display:block;width:100%;min-height:150px;border:0;background:#101d2a;color:#e3f2fb;font-size:16px;font-weight:600;cursor:pointer}.article-embed-load:hover{background:#182b3b}
+.article-body .article-embed-source{display:block;padding:12px 18px;border-top:1px solid #486277;color:#a9ddfb;font-size:13px;text-decoration:none;overflow-wrap:anywhere}.article-body .article-embed-source:hover{text-decoration:underline}
+@media(max-width:650px){.article-embed{margin:24px 0 32px}.article-embed-post{height:500px}}
 .admin-slug-row{display:flex;align-items:center;background:#111d2a;border:1px solid #4b687b;border-radius:8px;overflow:hidden}.admin-slug-row span{color:#a5bed0;padding-left:14px;font:13px var(--font-mono)}.admin-slug-row [data-slot=input]{border:0;box-shadow:none;min-width:0}
 .admin-field-help{color:#8fa9bb;font-size:12px;line-height:1.5;margin-top:8px}
 .admin-editor-tools{display:flex;gap:6px;flex-wrap:wrap;border:1px solid #486277;background:#101c29;border-radius:9px;padding:8px;margin-bottom:10px}

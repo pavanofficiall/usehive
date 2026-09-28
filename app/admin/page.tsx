@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { ArticleContent } from "@/components/article-content";
 import { coverPresets } from "@/lib/cover-presets";
+import { embedDirective, resolveSocialEmbed } from "@/lib/social-embed";
 
 type Editor = { id?: string; title: string; slug: string; summary: string; cover_url: string; body: string; category: Category; status: PostStatus; pinned: boolean };
 const blank: Editor = { title: "", slug: "", summary: "", cover_url: "", body: "", category: "Build", status: "draft", pinned: false };
@@ -82,6 +83,20 @@ export default function AdminPage() {
     insertFormatting(kind === "image" ? `\n\n![` : "[", `](${url}${kind === "button" ? ' "hive-button"' : ""})${kind === "image" ? "\n\n" : ""}`, label);
   }
 
+  function insertEmbed() {
+    const entered = window.prompt("Paste a YouTube, X, Reddit, LinkedIn, or other HTTPS link");
+    if (!entered) return;
+    const embed = resolveSocialEmbed(entered);
+    if (!embed) { setMessage("Use a valid HTTPS link for the embed."); return; }
+    const field = bodyRef.current;
+    if (!field) return;
+    const start = field.selectionStart, end = field.selectionEnd;
+    const block = `\n\n${embedDirective(embed.url)}\n\n`;
+    setEditor(current => ({ ...current, body: current.body.slice(0, start) + block + current.body.slice(end) }));
+    setMessage("");
+    requestAnimationFrame(() => { field.focus(); field.setSelectionRange(start + block.length, start + block.length); });
+  }
+
   async function save(event: React.FormEvent) {
     event.preventDefault();
     if (preview) return;
@@ -132,10 +147,11 @@ export default function AdminPage() {
             <button type="button" onClick={() => insertMedia("link")}>Link</button>
             <button type="button" onClick={() => insertMedia("image")}>Image</button>
             <button type="button" onClick={() => insertMedia("button")}>Button</button>
+            <button type="button" onClick={insertEmbed}>Social embed</button>
             <button type="button" onClick={() => setPostPreview(value => !value)} aria-pressed={postPreview}>{postPreview ? "Hide preview" : "Preview"}</button>
           </div>
-          <Textarea ref={bodyRef} id="post-body" value={editor.body} onChange={e => setEditor({ ...editor, body: e.target.value })} placeholder="Write your story. Press Enter for a new line. Use the tools to format text and add images or buttons." required minLength={20} rows={16}/>
-          <small className="admin-field-help">Preview shows how line breaks, formatting, images and buttons will appear in the article.</small>
+          <Textarea ref={bodyRef} id="post-body" value={editor.body} onChange={e => setEditor({ ...editor, body: e.target.value })} placeholder="Write your story. Press Enter for a new line. Use the tools to format text and add images, buttons or social posts." required minLength={20} rows={16}/>
+          <small className="admin-field-help">Paste a YouTube or public social post URL on its own line, or use Social embed to place it at the cursor. Preview it before publishing.</small>
           {postPreview && <div className="admin-article-preview"><div className="eyebrow">THE HIVE JOURNAL</div><h2>{editor.title || "Article headline"}</h2><p className="article-summary">{editor.summary || "Article summary"}</p>{editor.cover_url && <img className="article-cover" src={editor.cover_url} alt=""/>}<ArticleContent body={editor.body || "Start writing to preview your article."}/></div>}
           <div className="admin-form-grid"><div><label>Status</label><Select value={editor.status} onValueChange={value => setEditor({ ...editor, status: value as PostStatus })}><SelectTrigger className="admin-select"><SelectValue/></SelectTrigger><SelectContent><SelectItem value="draft">Draft</SelectItem><SelectItem value="published">Published</SelectItem></SelectContent></Select></div></div>
           <label className="pin-toggle"><input type="checkbox" checked={editor.pinned} onChange={e => setEditor({ ...editor, pinned: e.target.checked })}/><span><strong>Pin as the lead story</strong><small>Only one story can be pinned at a time.</small></span></label>
