@@ -9,8 +9,9 @@ import { ArticleContent } from "@/components/article-content";
 
 export const dynamic = "force-dynamic";
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
-  const { post } = await publicPost((await params).slug).catch(() => ({ post: null }));
-  return { title: post ? `${post.title} | HIVE` : "Story | HIVE", description: post?.summary || "HIVE journal" };
+  const slug = (await params).slug;
+  const { post } = await publicPost(slug).catch(() => ({ post: null }));
+  return { title: post ? `${post.title} | HIVE` : "Story | HIVE", description: post?.summary || "HIVE journal", ...(post ? { alternates: { canonical: `/blog/${encodeURIComponent(slug)}` } } : {}) };
 }
 
 export default async function StoryPage({ params }: { params: Promise<{ slug: string }> }) {

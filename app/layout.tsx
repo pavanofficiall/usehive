@@ -3,8 +3,15 @@ import "./globals.css";
 import { SiteEffects } from "@/components/site-effects";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://www.usehive.tech"),
   title: "HIVE | Build an MCP layer that stays in sync",
   description: "HIVE is a developer CLI for building a production-ready MCP layer and keeping it current as your product changes.",
+  openGraph: {
+    type: "website",
+    siteName: "HIVE",
+    images: [{ url: "/blue-sky.jpg", width: 3840, height: 2160, alt: "HIVE blue sky gradient" }],
+  },
+  twitter: { card: "summary_large_image" },
   icons: {
     icon: "/favicon.svg",
     shortcut: "/favicon.svg",

@@ -7,6 +7,7 @@ import styles from "./manifesto.module.css";
 export const metadata: Metadata = {
   title: "The Hive manifesto",
   description: "Built to be used, not looked at. The Hive manifesto on software made for agents.",
+  alternates: { canonical: "/manifesto" },
 };
 
 function Label({ children, number }: { children: React.ReactNode; number: string }) {

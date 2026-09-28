@@ -1,0 +1,23 @@
+# HIVE
+
+> HIVE CLI helps developers build a local MCP server for an existing TypeScript Next.js App Router product and review which capabilities agents can use.
+
+## When to use HIVE
+
+Use HIVE when you maintain a TypeScript Next.js App Router application and want to scan its existing API capabilities, review generated MCP tools, and run a local MCP server. Re-scan after your application changes. The current beta generates a local, single-user server; it does not provide a hosted MCP endpoint or production OAuth.
+
+## Start here
+
+- Documentation: https://www.usehive.tech/docs
+- Configuration: https://www.usehive.tech/docs/configuration
+- CLI commands: https://www.usehive.tech/docs/commands
+- Official npm package: https://www.npmjs.com/package/@usehive/cli
+- Website sitemap: https://www.usehive.tech/sitemap.xml
+
+Run from the root of a supported app with Node.js 22.12 or newer:
+
+```sh
+npx @usehive/cli scan --install
+```
+
+Review discovered capabilities before approving write or destructive tools. Follow the documentation to configure the generated server and connect a local MCP client.

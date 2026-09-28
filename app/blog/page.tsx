@@ -3,7 +3,7 @@ import { SiteFooter, SiteHeader } from "@/components/site-chrome";
 import { PostCard } from "@/components/post-card";
 import { BlogFeed } from "@/components/blog-feed";
 import { publicPinnedPost, publicPostPage } from "@/lib/posts";
-export const metadata: Metadata = { title: "Blog | HIVE", description: "Notes on building and maintaining production-ready MCP layers." };
+export const metadata: Metadata = { title: "Blog | HIVE", description: "Notes on building and maintaining production-ready MCP layers.", alternates: { canonical: "/blog" } };
 export const dynamic = "force-dynamic";
 export default async function BlogPage() {
   let pinned = null, data = { posts: [] as Awaited<ReturnType<typeof publicPostPage>>["posts"], hasMore: false }, failed = false;

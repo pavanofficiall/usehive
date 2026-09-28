@@ -11,7 +11,7 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { slug } = await params;
   const page = docPages.find(page => page.slug === slug);
-  return page ? { title: `${page.title} | HIVE CLI Docs`, description: page.description } : {};
+  return page ? { title: `${page.title} | HIVE CLI Docs`, description: page.description, alternates: { canonical: `/docs/${slug}` } } : {};
 }
 
 export default async function DocsSectionPage({ params }: Params) {
