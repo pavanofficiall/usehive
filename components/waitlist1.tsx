@@ -2,6 +2,7 @@
 
 import type { FormEvent } from "react";
 import { DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import ShinyText from "@/components/ShinyText";
 
 interface Waitlist1Props {
   email: string;
@@ -19,7 +20,9 @@ export function Waitlist1({ email, onEmailChange, onSubmit, status, error }: Wai
         <DialogHeader className="waitlist1-header">
           <span className="waitlist1-eyebrow">HIVE CLI BETA</span>
           <DialogTitle>Join the beta list</DialogTitle>
-          <DialogDescription>Get 500k tokens when v1 launches.</DialogDescription>
+          <DialogDescription>
+            <ShinyText text="Get 500k tokens when v1 launches." color="#b1c2d3" shineColor="#ffffff" speed={3.2} delay={1.6} spread={105} />
+          </DialogDescription>
         </DialogHeader>
         {status === "joined" ? (
           <p className="waitlist1-success" role="status">You&apos;re on the beta list. We&apos;ll email you when v1 is ready.</p>

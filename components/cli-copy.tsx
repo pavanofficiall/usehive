@@ -23,7 +23,7 @@ export function CliCopy({ ready }: { ready: boolean }) {
       if (!await copyText(value)) throw new Error("Clipboard unavailable");
       setCopied(kind);
       setError(false);
-      if (kind === "command") setBetaOpen(true);
+      setBetaOpen(true);
       window.setTimeout(() => setCopied(current => current === kind ? null : current), 2200);
     } catch {
       setError(true);
