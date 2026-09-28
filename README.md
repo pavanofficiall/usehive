@@ -25,6 +25,8 @@ The blog reads published posts only. No connection or no posts means no cards. O
 
 The admin editor supports a custom `/blog/` link and checks for duplicate links before saving. Its article toolbar inserts Markdown for bold, italic, headings, lists, links, HTTPS images, and button links. The preview uses the same renderer as published articles. A single Enter creates a visible line break, and blank lines create separate paragraphs. Images within an article use HTTPS URLs; the cover image has its own field.
 
+The cover field also offers bundled image presets in `/admin`. Selecting one saves its site-local path to the post. Custom HTTPS cover URLs remain available.
+
 The demo pauses until it expands fully at the viewport center, holds there for about two viewport scrolls, and pauses again when leaving. Its sound button starts muted. Reduced-motion settings are respected. The footer wordmark follows scroll using GSAP.
 
 The optional font experiments remain self-hosted, with licenses in `public/fonts/licenses/`. Typography references: [Vercel Geist](https://vercel.com/font) and [Google Fonts](https://fonts.google.com/).

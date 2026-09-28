@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { ArticleContent } from "@/components/article-content";
+import { coverPresets } from "@/lib/cover-presets";
 
 type Editor = { id?: string; title: string; slug: string; summary: string; cover_url: string; body: string; category: Category; status: PostStatus; pinned: boolean };
 const blank: Editor = { title: "", slug: "", summary: "", cover_url: "", body: "", category: "Build", status: "draft", pinned: false };
@@ -114,7 +115,13 @@ export default function AdminPage() {
         {preview && <div className="admin-preview-note">Layout preview. Publishing will work after Supabase and your admin code are configured.</div>}
         <form onSubmit={save}><label htmlFor="post-title">Headline</label><Input id="post-title" value={editor.title} onChange={e => setEditor({ ...editor, title: e.target.value, slug: !editor.slug || editor.slug === makeSlug(editor.title) ? makeSlug(e.target.value) : editor.slug })} placeholder="Give this story a clear headline" required minLength={3} maxLength={160}/>
           <label htmlFor="post-slug">Article link</label><div className="admin-slug-row"><span>/blog/</span><Input id="post-slug" value={editor.slug} onChange={e => setEditor({ ...editor, slug: makeSlug(e.target.value) })} placeholder="my-article" required maxLength={90} aria-invalid={slugConflict}/></div><small className="admin-field-help" role={slugConflict ? "alert" : undefined}>{slugConflict ? "This link is already used by another article." : "Choose a unique link. Letters, numbers and hyphens only."}</small>
-          <label htmlFor="post-cover">Cover image URL</label><Input id="post-cover" type="url" value={editor.cover_url} onChange={e => setEditor({ ...editor, cover_url: e.target.value })} placeholder="https://…"/>
+          <label htmlFor="post-cover">Cover image</label>
+          <p className="admin-field-help">Choose one of your presets, or paste an HTTPS image URL.</p>
+          <div className="admin-cover-presets" role="group" aria-label="Preset cover images">
+            {coverPresets.map(preset => <button key={preset.src} type="button" className={editor.cover_url === preset.src ? "admin-cover-preset selected" : "admin-cover-preset"} aria-pressed={editor.cover_url === preset.src} onClick={() => setEditor(current => ({ ...current, cover_url: preset.src }))}><img src={preset.src} alt="" loading="lazy"/><span>{preset.name}</span></button>)}
+          </div>
+          <Input id="post-cover" type="text" value={editor.cover_url} onChange={e => setEditor({ ...editor, cover_url: e.target.value })} placeholder="https://example.com/cover.jpg"/>
+          {editor.cover_url && <button className="admin-clear-cover" type="button" onClick={() => setEditor(current => ({ ...current, cover_url: "" }))}>Remove cover</button>}
           <label htmlFor="post-summary">Summary</label><Textarea id="post-summary" value={editor.summary} onChange={e => setEditor({ ...editor, summary: e.target.value })} placeholder="One or two sentences that tell readers why it matters" required minLength={10} maxLength={360} rows={3}/>
           <label htmlFor="post-body">Article body</label>
           <div className="admin-editor-tools" aria-label="Article formatting tools">
