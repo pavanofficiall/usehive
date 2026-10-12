@@ -1,8 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { ArrowLeft, ExternalLink, LogOut, Plus, Save, Trash2 } from "lucide-react";
-import type { Category, Post, PostStatus } from "@/lib/posts";
+import { ArrowLeft, Download, ExternalLink, LogOut, Plus, Save, Trash2, Users } from "lucide-react";
+import type { BetaUser, Category, Post, PostStatus } from "@/lib/posts";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -23,6 +23,8 @@ export default function AdminPage() {
   const [preview, setPreview] = useState(false);
   const [pin, setPin] = useState("");
   const [posts, setPosts] = useState<Post[]>([]);
+  const [betaUsers, setBetaUsers] = useState<BetaUser[]>([]);
+  const [betaTab, setBetaTab] = useState(false);
   const [editor, setEditor] = useState<Editor>(blank);
   const [postPreview, setPostPreview] = useState(false);
   const bodyRef = useRef<HTMLTextAreaElement>(null);
@@ -37,24 +39,38 @@ export default function AdminPage() {
     else setMessage("Could not load posts. Refresh and try again.");
   }, []);
 
+  const loadBetaUsers = useCallback(async () => {
+    const response = await fetch("/api/admin/beta", { cache: "no-store" });
+    if (response.ok) { const data = await response.json() as { users: BetaUser[] }; setBetaUsers(data.users); }
+  }, []);
+
   useEffect(() => {
     fetch("/api/admin/session", { cache: "no-store" }).then(response => response.json() as Promise<{ configured: boolean; authenticated: boolean }>).then(data => {
       setConfigured(data.configured); setAuthenticated(data.authenticated); setLoaded(true);
-      if (data.authenticated) void loadPosts();
+      if (data.authenticated) { void loadPosts(); void loadBetaUsers(); }
     }).catch(() => { setLoaded(true); setMessage("Admin is temporarily unavailable."); });
-  }, [loadPosts]);
+  }, [loadPosts, loadBetaUsers]);
 
   async function login(event: React.FormEvent) {
     event.preventDefault(); setMessage("");
     const response = await fetch("/api/admin/session", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ pin }) });
     const data = await response.json() as { error?: string; authenticated?: boolean };
     if (!response.ok) { setMessage(data.error || "Could not sign in."); setPin(""); return; }
-    setAuthenticated(true); setPin(""); void loadPosts();
+    setAuthenticated(true); setPin(""); void loadPosts(); void loadBetaUsers();
   }
 
   async function logout() {
     await fetch("/api/admin/session", { method: "DELETE" });
-    setAuthenticated(false); setPosts([]); setEditor(blank);
+    setAuthenticated(false); setPosts([]); setBetaUsers([]); setEditor(blank); setBetaTab(false);
+  }
+
+  function exportBetaCSV() {
+    const csv = ["email,joined_at", ...betaUsers.map(u => `${u.email},${u.created_at}`)].join("\n");
+    const blob = new Blob([csv], { type: "text/csv" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = `hive-beta-users-${new Date().toISOString().slice(0,10)}.csv`;
+    link.click();
   }
 
   function edit(post: Post) {
@@ -158,7 +174,30 @@ export default function AdminPage() {
           <div className="admin-actions"><button className="admin-primary" type="submit" disabled={saving || preview || slugConflict}><Save size={16}/> {saving ? "Saving…" : editor.status === "published" ? "Publish story" : "Save draft"}</button>{editor.id && <button type="button" className="admin-danger" onClick={() => setDeleteId(editor.id!)} disabled={preview}><Trash2 size={16}/> Delete</button>}</div>
         </form>{message && <p className="admin-message" role="status">{message}</p>}
       </section>
-      <aside className="admin-list"><div className="admin-section-head"><div><span className="eyebrow">YOUR JOURNAL</span><h2>All stories <small>{posts.length}</small></h2></div></div><div className="admin-posts">{posts.length ? posts.map(post => <button className={editor.id === post.id ? "admin-post selected" : "admin-post"} key={post.id} onClick={() => edit(post)}><span className="admin-post-top"><span>{post.pinned ? "PINNED" : post.slug}</span><span>{post.status}</span></span><strong>{post.title}</strong><small>{post.summary}</small></button>) : <p className="admin-empty">No stories yet. Start with your first draft.</p>}</div></aside>
+      <aside className="admin-list">
+        <div className="admin-section-head">
+          <div><span className="eyebrow">YOUR JOURNAL</span><h2>All stories <small>{posts.length}</small></h2></div>
+          <button className="admin-secondary" style={{display:"flex",alignItems:"center",gap:"7px",fontSize:"13px",padding:"8px 13px"}} onClick={() => setBetaTab(v => !v)}><Users size={15}/>{betaTab ? "Stories" : `Beta (${betaUsers.length})`}</button>
+        </div>
+        {betaTab ? (
+          <div>
+            <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:"16px"}}>
+              <span style={{color:"#8fa8ba",fontSize:"13px"}}>{betaUsers.length} signups</span>
+              {betaUsers.length > 0 && <button className="admin-secondary" style={{display:"flex",alignItems:"center",gap:"6px",fontSize:"12px",padding:"7px 12px"}} onClick={exportBetaCSV}><Download size={13}/>Export CSV</button>}
+            </div>
+            <div style={{display:"flex",flexDirection:"column",gap:"8px",maxHeight:"520px",overflowY:"auto"}}>
+              {betaUsers.length ? betaUsers.map(user => (
+                <div key={user.id} style={{background:"#111b26",border:"1px solid #395269",borderRadius:"9px",padding:"13px 16px"}}>
+                  <div style={{color:"#e3f1fa",fontSize:"14px",fontWeight:600}}>{user.email}</div>
+                  <div style={{color:"#7a9ab1",fontSize:"11px",fontFamily:"var(--font-mono)",marginTop:"4px"}}>{new Date(user.created_at).toLocaleString()}</div>
+                </div>
+              )) : <p className="admin-empty">No beta signups yet.</p>}
+            </div>
+          </div>
+        ) : (
+          <div className="admin-posts">{posts.length ? posts.map(post => <button className={editor.id === post.id ? "admin-post selected" : "admin-post"} key={post.id} onClick={() => edit(post)}><span className="admin-post-top"><span>{post.pinned ? "PINNED" : post.slug}</span><span>{post.status}</span></span><strong>{post.title}</strong><small>{post.summary}</small></button>) : <p className="admin-empty">No stories yet. Start with your first draft.</p>}</div>
+        )}
+      </aside>
     </div>
     <AlertDialog open={Boolean(deleteId)} onOpenChange={open => !open && setDeleteId(null)}><AlertDialogContent className="admin-alert"><AlertDialogHeader><AlertDialogTitle>Delete this story?</AlertDialogTitle><AlertDialogDescription>This removes it from the blog and cannot be undone.</AlertDialogDescription></AlertDialogHeader><AlertDialogFooter><AlertDialogCancel>Keep story</AlertDialogCancel><AlertDialogAction onClick={remove}>Delete story</AlertDialogAction></AlertDialogFooter></AlertDialogContent></AlertDialog>
   </main>;

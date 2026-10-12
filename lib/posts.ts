@@ -85,3 +85,14 @@ export async function addWaitlistEmail(email: string): Promise<void> {
   if (!serviceKey) throw new Error("Supabase is not connected");
   await request<unknown>("waitlist?on_conflict=email", serviceKey, { method: "POST", headers: { Prefer: "resolution=ignore-duplicates,return=minimal" }, body: JSON.stringify({ email }) });
 }
+
+export type BetaUser = {
+  id: string;
+  email: string;
+  created_at: string;
+};
+
+export async function getBetaUsers(): Promise<BetaUser[]> {
+  if (!serviceKey) throw new Error("Supabase is not connected");
+  return request<BetaUser[]>("waitlist?select=*&order=created_at.desc", serviceKey);
+}
