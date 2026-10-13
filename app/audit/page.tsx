@@ -212,9 +212,6 @@ export default function AuditPage() {
           <main>
             {/* Hero */}
             <section className={styles.hero} aria-labelledby="audit-title">
-              <a className={styles.pill} href="#pricing" data-hero>
-                <span className={styles.pillDot} aria-hidden="true" /> Agent reliability audits · ₹4,999 flat <ArrowRight size={14} aria-hidden="true" />
-              </a>
               <h1 id="audit-title" data-hero>We break your AI agent<br /><span>so your users never do.</span></h1>
               <p className={styles.heroCopy} data-hero>50+ real prompts and edge cases. We find the failures, repair what we can, and show you exactly what happened.</p>
               <div className={styles.heroActions} data-hero>
