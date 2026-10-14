@@ -175,9 +175,9 @@ const jsonLd = {
   ],
 };
 
-function PrimaryButton({ children, light = false }: { children: React.ReactNode; light?: boolean }) {
+function PrimaryButton({ children }: { children: React.ReactNode }) {
   return (
-    <a className={light ? styles.lightButton : styles.primaryButton} href={bookingUrl} target="_blank" rel="noopener noreferrer">
+    <a className={styles.primaryButton} href={bookingUrl} target="_blank" rel="noopener noreferrer">
       {children} <ArrowRight size={17} aria-hidden="true" />
     </a>
   );
@@ -441,7 +441,7 @@ export default function AuditPage() {
                 <h2 id="final-title">Find the breaks<br />before your users do.</h2>
                 <p>₹4,999 per audit. Share access, and we&apos;ll take it from there.</p>
                 <div className={styles.heroActions}>
-                  <PrimaryButton light>Book an audit</PrimaryButton>
+                  <PrimaryButton>Book an audit</PrimaryButton>
                   <a className={styles.ghostButton} href={auditEmail}>pavan@usehive.tech</a>
                 </div>
               </div>

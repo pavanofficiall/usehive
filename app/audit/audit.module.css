@@ -46,23 +46,21 @@
 .section { padding: clamp(120px, 15vw, 210px) 0 0; scroll-margin-top: 24px; }
 
 /* ---------- Buttons ---------- */
-.primaryButton, .secondaryButton, .lightButton, .ghostButton {
+.primaryButton, .secondaryButton, .ghostButton {
   display: inline-flex; align-items: center; justify-content: center; gap: 10px;
   min-height: 48px; padding: 0 22px; border-radius: 12px;
   font-size: 15px; font-weight: 600; letter-spacing: -.01em;
   transition: transform .2s ease, background .2s ease, box-shadow .2s ease, border-color .2s ease;
 }
-.primaryButton svg, .lightButton svg { transition: transform .2s ease; }
-.primaryButton:hover svg, .lightButton:hover svg { transform: translateX(3px); }
+.primaryButton svg { transition: transform .2s ease; }
+.primaryButton:hover svg { transform: translateX(3px); }
 .primaryButton { background: var(--ink); color: #fff; box-shadow: 0 1px 0 #ffffff1f inset, 0 10px 24px #0a1b2c33; }
 .primaryButton:hover { background: #17324d; transform: translateY(-1px); }
 .secondaryButton { border: 1px solid #0a1b2c24; background: #ffffffc7; color: var(--ink); backdrop-filter: blur(8px); }
 .secondaryButton:hover { border-color: #0a1b2c55; background: #fff; transform: translateY(-1px); }
-.lightButton { background: #fff; color: var(--ink); }
-.lightButton:hover { background: #eaf3ff; transform: translateY(-1px); }
-.ghostButton { border: 1px solid #ffffff40; color: #e6f1fb; }
-.ghostButton:hover { border-color: #ffffffa0; }
-.primaryButton:focus-visible, .secondaryButton:focus-visible, .lightButton:focus-visible, .ghostButton:focus-visible { outline: 3px solid #7fb6ff; outline-offset: 3px; }
+.ghostButton { border: 1px solid #0a1b2c33; background: #ffffff59; color: var(--ink); backdrop-filter: blur(6px); }
+.ghostButton:hover { border-color: #0a1b2c80; background: #ffffff99; }
+.primaryButton:focus-visible, .secondaryButton:focus-visible, .ghostButton:focus-visible { outline: 3px solid #7fb6ff; outline-offset: 3px; }
 
 /* ---------- Hero ---------- */
 .hero { padding: clamp(56px, 7vw, 92px) clamp(20px, 5vw, 80px) 0; text-align: center; }
@@ -77,8 +75,13 @@
 .heroTrust { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 26px; margin: 26px 0 0; padding: 0; list-style: none; color: var(--ink-2); font-size: 13.5px; }
 .heroTrust li { display: inline-flex; align-items: center; gap: 6px; }
 .heroTrust svg { color: var(--pass); }
-.heroShot { width: min(1120px, 100%); margin: clamp(64px, 8vw, 104px) auto 0; perspective: 1400px; }
-.heroShot > div { will-change: transform; }
+.heroShot { position: relative; width: min(1120px, 100%); margin: clamp(64px, 8vw, 104px) auto 0; perspective: 1400px; }
+.heroShot::before {
+  content: ""; position: absolute; inset: 12% -6% -10%; z-index: 0; pointer-events: none;
+  background: url('/audit/glow-hero.webp') center / cover no-repeat;
+  border-radius: 50%; filter: blur(48px) saturate(1.1); opacity: .5;
+}
+.heroShot > div { position: relative; z-index: 1; will-change: transform; }
 
 /* ---------- Hero dashboard ---------- */
 .dash { overflow: hidden; border: 1px solid #0a1b2c1a; border-radius: 16px; background: var(--surface); box-shadow: var(--shadow-lg); text-align: left; }
@@ -184,7 +187,7 @@
 .methodStageInner {
   position: sticky; top: calc(50vh - var(--step-h) / 2); display: grid; height: var(--step-h); padding: clamp(20px, 3vw, 40px);
   border: 1px solid var(--line); border-radius: 22px;
-  background: radial-gradient(circle at 80% 0%, #dcebff, transparent 60%), linear-gradient(180deg, #f3f7fc, #eef3f9);
+  background: linear-gradient(#ffffff9e, #ffffff9e), url('/audit/wash-method.webp') center / cover no-repeat;
 }
 .methodVisual { grid-area: 1 / 1; align-self: center; opacity: 0; transform: translateY(14px) scale(.98); transition: opacity .45s ease, transform .45s ease; pointer-events: none; }
 .methodVisualOn { opacity: 1; transform: none; }
@@ -209,7 +212,7 @@
 
 /* ---------- Sample report ---------- */
 .reportFrame { overflow: hidden; border: 1px solid var(--line); border-radius: 20px; background: var(--surface); box-shadow: var(--shadow-lg); }
-.reportHead { display: flex; justify-content: space-between; align-items: center; gap: 24px; padding: clamp(24px, 3vw, 36px) clamp(22px, 4vw, 52px); border-bottom: 1px solid var(--line); background: #fbfcfd; }
+.reportHead { display: flex; justify-content: space-between; align-items: center; gap: 24px; padding: clamp(24px, 3vw, 36px) clamp(22px, 4vw, 52px); border-bottom: 1px solid var(--line); background: linear-gradient(90deg, #ffffffeb 35%, #ffffffa6), url('/audit/wash-report.webp') right center / cover no-repeat; }
 .reportTitle { margin: 6px 0 0; font-size: clamp(19px, 2vw, 24px); font-weight: 600; letter-spacing: -.03em; }
 .reportScore { text-align: right; }
 .reportScore b { display: block; color: var(--pass); font-size: clamp(34px, 3.6vw, 46px); font-weight: 600; letter-spacing: -.05em; line-height: 1; font-variant-numeric: tabular-nums; }
@@ -258,7 +261,12 @@
 .audience svg { color: var(--brand); }
 
 /* ---------- Founder ---------- */
-.founder { max-width: 860px; margin: 0 auto; text-align: center; }
+.founder { position: relative; isolation: isolate; max-width: 860px; margin: 0 auto; text-align: center; }
+.founder::before {
+  content: ""; position: absolute; inset: -18% -12%; z-index: -1; pointer-events: none;
+  background: url('/audit/wash-founder.webp') center / cover no-repeat;
+  border-radius: 50%; filter: blur(70px); opacity: .22;
+}
 .founder blockquote { margin: 0; font-size: clamp(24px, 3vw, 38px); font-weight: 500; line-height: 1.35; letter-spacing: -.03em; text-wrap: balance; }
 .founder figcaption { display: inline-flex; align-items: center; gap: 12px; margin-top: 40px; text-align: left; font-size: 14px; }
 .avatar { display: grid; place-items: center; width: 42px; height: 42px; border-radius: 50%; background: linear-gradient(135deg, var(--brand), #33b5ff); color: #fff; font-weight: 600; }
@@ -269,7 +277,7 @@
 
 /* ---------- Pricing ---------- */
 .priceCard { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); max-width: 1000px; margin: 0 auto; overflow: hidden; border: 1px solid var(--line); border-radius: 24px; background: var(--surface); box-shadow: var(--shadow-lg); }
-.priceMain { padding: clamp(32px, 5vw, 64px); }
+.priceMain { padding: clamp(32px, 5vw, 64px); background: linear-gradient(#ffffffd1, #ffffffd1), url('/audit/wash-price.webp') left top / cover no-repeat; }
 .priceBadge { display: inline-block; padding: 4px 10px; border-radius: 999px; background: var(--brand-soft); color: var(--brand); font-size: 12.5px; font-weight: 600; }
 .priceMain h3 { margin: 18px 0 0; font-size: 22px; font-weight: 600; letter-spacing: -.03em; }
 .priceAmount { display: flex; align-items: baseline; gap: 10px; margin: 18px 0 8px; line-height: 1; }
@@ -297,12 +305,12 @@
 /* ---------- Final CTA ---------- */
 .ctaWrap { padding: clamp(120px, 15vw, 210px) clamp(20px, 5vw, 80px) clamp(96px, 12vw, 160px); }
 .cta {
-  max-width: 1200px; margin: 0 auto; padding: clamp(64px, 10vw, 128px) 24px; border-radius: 26px; text-align: center; color: #fff;
-  background: radial-gradient(ellipse at 50% 120%, #2c86f0 0%, transparent 60%), linear-gradient(160deg, #0b2a4a, #071827 70%);
+  max-width: 1200px; margin: 0 auto; padding: clamp(64px, 10vw, 128px) 24px; border-radius: 26px; text-align: center; color: var(--ink);
+  background: linear-gradient(#ffffff26, #ffffff26), url('/audit/wash-cta.webp') center / cover no-repeat;
   box-shadow: var(--shadow-lg);
 }
 .cta h2 { margin: 0; }
-.cta p { margin: 22px auto 0; color: #b9cde0; font-size: 17px; }
+.cta p { margin: 22px auto 0; color: var(--ink-2); font-size: 17px; }
 
 /* ---------- Responsive ---------- */
 @media (max-width: 1024px) {
@@ -351,7 +359,7 @@
   .cta { border-radius: 20px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .bento article, .primaryButton, .secondaryButton, .lightButton, .methodList li, .methodVisual, .faqPanel, .faqIcon { transition: none; }
-  .bento article:hover, .primaryButton:hover, .secondaryButton:hover, .lightButton:hover { transform: none; }
+  .bento article, .primaryButton, .secondaryButton, .methodList li, .methodVisual, .faqPanel, .faqIcon { transition: none; }
+  .bento article:hover, .primaryButton:hover, .secondaryButton:hover { transform: none; }
   .dashLive span, .spinner { animation: none; }
 }
