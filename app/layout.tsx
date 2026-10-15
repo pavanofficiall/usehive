@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import Script from "next/script";
 import { SiteEffects } from "@/components/site-effects";
+
+const GOOGLE_ANALYTICS_ID = "G-YD34N1NRVL";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.usehive.tech"),
@@ -43,7 +46,15 @@ export default function RootLayout({
         {/* eslint-disable-next-line @next/next/no-sync-scripts */}
         <script dangerouslySetInnerHTML={{ __html: introBlocker }} />
       </head>
-      <body className="antialiased"><div id="hive-boot-screen" aria-hidden="true"/><SiteEffects/>{children}</body>
+      <body className="antialiased"><div id="hive-boot-screen" aria-hidden="true"/><SiteEffects/>{children}
+        <Script src={`https://www.googletagmanager.com/gtag/js?id=${GOOGLE_ANALYTICS_ID}`} strategy="afterInteractive" />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', '${GOOGLE_ANALYTICS_ID}');`}
+        </Script>
+      </body>
     </html>
   );
 }
