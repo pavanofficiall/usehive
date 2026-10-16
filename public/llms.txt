@@ -8,11 +8,12 @@ Use HIVE when you maintain a TypeScript Next.js App Router application and want 
 
 ## Start here
 
-- Documentation: https://www.usehive.tech/docs
-- Configuration: https://www.usehive.tech/docs/configuration
-- CLI commands: https://www.usehive.tech/docs/commands
-- Official npm package: https://www.npmjs.com/package/@usehive/cli
-- Website sitemap: https://www.usehive.tech/sitemap.xml
+- [Documentation](https://www.usehive.tech/docs)
+- [Configuration](https://www.usehive.tech/docs/configuration)
+- [CLI commands](https://www.usehive.tech/docs/commands)
+- [Agent reliability audit](https://www.usehive.tech/audit)
+- [Official npm package](https://www.npmjs.com/package/@usehive/cli)
+- [Website sitemap](https://www.usehive.tech/sitemap.xml)
 
 Run from the root of a supported app with Node.js 22.12 or newer:
 

@@ -35,7 +35,8 @@ export function SiteEffects() {
   useEffect(() => {
     let seen = false;
     try { seen = sessionStorage.getItem(INTRO_SEEN_KEY) === "true"; } catch { /* Storage can be unavailable in private browsers. */ }
-    if (seen || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    const audit = /^\/audit(\/|$)/.test(window.location.pathname);
+    if (seen || audit || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       delete document.documentElement.dataset.hiveIntro;
       document.documentElement.dataset.hiveIntroReady = "true";
       window.dispatchEvent(new Event("hive:intro-ready"));
@@ -49,7 +50,7 @@ export function SiteEffects() {
     document.documentElement.dataset.hiveIntroReady = "false";
     const minimum = new Promise<void>(resolve => window.setTimeout(resolve, 650));
     const maximum = new Promise<void>(resolve => window.setTimeout(resolve, 2400));
-    const assets = Promise.all([loadImage("/blue-sky.jpg"), loadImage("/hive-demo-poster.jpg"), document.fonts.ready]);
+    const assets = Promise.all([loadImage("/blue-sky.webp"), loadImage("/hive-demo-poster.jpg"), document.fonts.ready]);
     Promise.race([Promise.all([minimum, assets]), maximum]).then(() => {
       if (!cancelled) setAssetsReady(true);
     });

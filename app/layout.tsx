@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     siteName: "HIVE",
-    images: [{ url: "/blue-sky.jpg", width: 3840, height: 2160, alt: "HIVE blue sky gradient" }],
+    images: [{ url: "/blue-sky.jpg", width: 1920, height: 1080, alt: "HIVE blue sky gradient" }],
   },
   twitter: { card: "summary_large_image" },
   icons: {
@@ -22,11 +22,14 @@ export const metadata: Metadata = {
 };
 
 // Decide whether this browser tab needs the intro before the page can paint.
+// The audit page never shows it.
 const introBlocker = `(function(){
   var seen=false;
   try{seen=sessionStorage.getItem('hive:intro-seen')==='true';}catch(e){}
   var reduced=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if(!seen&&!reduced){
+  var path=location.pathname;
+  var audit=path==='/audit'||path.indexOf('/audit/')===0;
+  if(!seen&&!reduced&&!audit){
     document.documentElement.setAttribute('data-hive-intro','pending');
   }
 })()`;

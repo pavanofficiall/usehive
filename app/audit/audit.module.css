@@ -35,7 +35,7 @@
 .sky {
   background:
     linear-gradient(180deg, #f6f8fb00 0px, #f6f8fb00 260px, #f6f8fbd9 620px, var(--bg) 900px) no-repeat,
-    url('/blue-sky.jpg') center top / 100% 1000px no-repeat,
+    url('/blue-sky.webp') center top / 100% 1000px no-repeat,
     var(--bg);
 }
 /* The shared header shows a "beta" tag; hide it on this page. */
