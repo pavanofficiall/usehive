@@ -5,7 +5,7 @@ import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 
 export function SiteHeader() {
-  return <header className="site-header"><a href="/" className="brand" aria-label="HIVE home"><Image src="/hivelogo.svg" alt="" width={30} height={32} className="brand-mark"/><span className="brand-name">HIVE<sup>beta</sup></span></a><div className="header-tools"><nav aria-label="Main navigation"><a href="/audit" aria-label="Reliability audit"><span className="nav-label-long">Reliability audit</span><span className="nav-label-short">Audit</span></a><a href="/docs">Docs</a><a href="/manifesto">Manifesto</a><a href="/blog">Blog <ArrowRight size={16}/></a></nav></div></header>;
+  return <header className="site-header"><a href="/" className="brand" aria-label="HIVE home"><Image src="/hivelogo.svg" alt="" width={30} height={32} className="brand-mark"/><span className="brand-name">HIVE<sup>beta</sup></span></a><div className="header-tools"><nav aria-label="Main navigation"><a href="/audit"><span><span className="nav-label-extra">Reliability </span>audit</span></a><a href="/docs">Docs</a><a href="/manifesto">Manifesto</a><a href="/blog">Blog <ArrowRight size={16}/></a></nav></div></header>;
 }
 
 export function SiteFooter() {

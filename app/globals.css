@@ -171,4 +171,4 @@ html{background:#080d15;overscroll-behavior-y:none}body{overscroll-behavior-y:no
 .cli-docs-link:hover{color:#061c2d}.cli-docs-link+.cli-docs-link{margin-left:18px}
 @media(max-width:700px){.cli-actions{flex-direction:column;align-items:stretch}.cli-copy-row{width:100%}.agent-copy-button{min-height:48px}.cli-copy-row code{font-size:12px}}
 @media(max-width:390px){.cli-copy-row{gap:6px;padding-left:15px}.cli-copy-row button{padding:0 10px}.cli-copy-row button svg{display:none}}
-.nav-label-short{display:none}@media(max-width:700px){.nav-label-long{display:none}.nav-label-short{display:inline}}
+.site-header nav a[href="/audit"]>span::first-letter{text-transform:uppercase}@media(max-width:700px){.nav-label-extra{display:none}}
