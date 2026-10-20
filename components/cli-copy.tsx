@@ -68,7 +68,7 @@ export function CliCopy({ ready }: { ready: boolean }) {
         </button>
       </div>
       <a className="cli-docs-link" href="/docs">Read the CLI docs <ArrowUpRight size={14} /></a>
-      <a className="cli-docs-link" href="/audit">Reliability audit <ArrowUpRight size={14} /></a>
+      <a className="cli-docs-link" href="/audit">Audit <ArrowUpRight size={14} /></a>
       <span className="sr-only" role="status">{error ? "Clipboard unavailable. Select and copy the text instead." : copied === "agent" ? "Agent prompt copied" : copied === "command" ? "CLI command copied" : ""}</span>
       <Dialog open={betaOpen} onOpenChange={setBetaOpen}>
         <DialogContent className="beta-dialog waitlist-dialog">
