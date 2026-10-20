@@ -208,7 +208,7 @@ export default function AuditPage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <AuditMotion>
         <div className={styles.sky}>
-          <SiteHeader nav={false} />
+          <SiteHeader minimal />
           <main>
             {/* Hero */}
             <section className={styles.hero} aria-labelledby="audit-title">
