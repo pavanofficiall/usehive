@@ -104,7 +104,7 @@ export function DocsShell({ pages, slug, children }: {
 }
 
 export const toc: Record<string, readonly Heading[]> = {
-  "": [{ id: "requirements", title: "Before you start" }, { id: "preview", title: "Preview the scan" }, { id: "install", title: "Generate and install" }, { id: "run", title: "Run it locally" }],
-  configuration: [{ id: "environment", title: "Environment" }, { id: "authentication", title: "Application auth" }, { id: "connect", title: "Connect a client" }, { id: "check", title: "Check the setup" }],
+  "": [{ id: "requirements", title: "Before you start" }, { id: "preview", title: "Preview the scan" }, { id: "install", title: "Generate and install" }, { id: "run", title: "Run it locally" }, { id: "sync", title: "Keep it in sync" }],
+  configuration: [{ id: "environment", title: "Environment" }, { id: "authentication", title: "Application auth" }, { id: "connect", title: "Connect a client" }, { id: "permissions", title: "Permissions" }, { id: "logs", title: "Action log" }, { id: "remote", title: "Remote access" }, { id: "check", title: "Check the setup" }],
   commands: [{ id: "usage", title: "Run a command" }, { id: "reference", title: "Command reference" }, { id: "rescan", title: "When your app changes" }, { id: "scope", title: "Current scope" }],
 };
