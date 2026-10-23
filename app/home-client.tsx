@@ -7,6 +7,7 @@ import ScrollReveal from "@/components/reactbits/ScrollReveal";
 import { DemoScroll } from "@/components/demo-scroll";
 import { CliCopy } from "@/components/cli-copy";
 import { SiteFooter, SiteHeader } from "@/components/site-chrome";
+import { HiveBee } from "@/components/hive-bee/hive-bee";
 
 export default function HomeClient() {
   const [introReady, setIntroReady] = useState(false);
@@ -53,5 +54,6 @@ export default function HomeClient() {
       </section>
       <SiteFooter />
     </main>
+    <HiveBee />
   </>;
 }
