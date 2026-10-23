@@ -88,7 +88,8 @@ async function askGemini(message: string, only?: BeeTool | "none"): Promise<{ to
         contents: [{ role: "user", parts: [{ text: message }] }],
         tools: geminiTools,
         toolConfig,
-        generationConfig: { maxOutputTokens: 120, temperature: 0.9 },
+        // Short replies don't need thinking, which would also eat the output budget.
+        generationConfig: { maxOutputTokens: 200, temperature: 0.9, thinkingConfig: { thinkingBudget: 0 } },
       }),
       signal: AbortSignal.timeout(8000),
       cache: "no-store",
@@ -97,13 +98,20 @@ async function askGemini(message: string, only?: BeeTool | "none"): Promise<{ to
     const data = await response.json() as { candidates?: { content?: { parts?: GeminiPart[] } }[] };
     const parts = data.candidates?.[0]?.content?.parts || [];
     const call = parts.find(part => part.functionCall)?.functionCall;
-    const text = parts.map(part => part.text || "").join(" ").trim();
+    const text = completeSentences(parts.map(part => part.text || "").join(" ").trim());
     if (call && isBeeTool(call.name)) return { tool: call.name, args: sanitize(call.args || {}), text };
     return { tool: null, args: {}, text };
   } catch (error) {
     console.error("Bee: Gemini request failed:", error);
     return null;
   }
+}
+
+/** Drops a trailing half-sentence if the model was cut off. */
+function completeSentences(text: string) {
+  if (!text || /[.!?)"…]$/.test(text)) return text;
+  const end = Math.max(text.lastIndexOf(". "), text.lastIndexOf("! "), text.lastIndexOf("? "));
+  return end > 0 ? text.slice(0, end + 1) : "";
 }
 
 /** Only well-formed, short values ever reach the browser. */
