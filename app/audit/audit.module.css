@@ -281,6 +281,15 @@
 .priceBadge { display: inline-block; padding: 4px 10px; border-radius: 999px; background: var(--brand-soft); color: var(--brand); font-size: 12.5px; font-weight: 600; }
 .priceMain h3 { margin: 18px 0 0; font-size: 22px; font-weight: 600; letter-spacing: -.03em; }
 .priceAmount { display: flex; align-items: baseline; gap: 10px; margin: 18px 0 8px; line-height: 1; }
+.priceOld { position: relative; color: var(--faint); font-size: 28px; letter-spacing: -.03em; }
+.priceOld::after { content: ""; position: absolute; left: -4%; right: -4%; top: 54%; height: 2px; background: var(--fail); }
+.priceBadgeTrial { background: var(--pass-soft); color: var(--pass); }
+.trialPill {
+  display: inline-flex; align-items: center; gap: 10px; margin: 0 auto 22px; padding: 8px 16px 8px 12px;
+  border: 1px solid #0e936340; border-radius: 999px; background: #ffffffd9; color: var(--ink);
+  font-size: 14px; font-weight: 600; letter-spacing: -.01em; backdrop-filter: blur(8px);
+}
+.trialPill span { width: 8px; height: 8px; border-radius: 50%; background: var(--pass); box-shadow: 0 0 0 4px var(--pass-soft); }
 .priceValue { font-size: clamp(52px, 6vw, 68px); font-weight: 600; letter-spacing: -.05em; }
 .pricePer { color: var(--muted); font-size: 17px; }
 .priceNote { margin: 0 0 26px; color: var(--muted); font-size: 14.5px; line-height: 1.5; }

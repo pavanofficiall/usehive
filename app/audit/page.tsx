@@ -14,14 +14,25 @@ const geist = localFont({ src: "../../public/fonts/47c091c982e8e934.woff2", weig
 const description =
   "HIVE tests your AI agent with 50+ real prompts and edge cases, repairs what we can, and gives you a full report of every prompt, failure, and fix.";
 
-export const metadata: Metadata = {
-  title: "AI agent reliability audits | HIVE",
-  description,
-  alternates: { canonical: "/audit" },
-};
+type PageProps = { searchParams: Promise<Record<string, string | string[] | undefined>> };
+
+/** Trial links (/audit?trial) show free pricing for invited teams. */
+const isTrial = async (searchParams: PageProps["searchParams"]) => "trial" in await searchParams;
+
+export async function generateMetadata({ searchParams }: PageProps): Promise<Metadata> {
+  return {
+    title: "AI agent reliability audits | HIVE",
+    description,
+    alternates: { canonical: "/audit" },
+    // Only the standard page is indexed; trial links are for invited teams.
+    ...(await isTrial(searchParams) ? { robots: { index: false, follow: true } } : {}),
+  };
+}
 
 const auditEmail = "mailto:pavan@usehive.tech?subject=Audit%20my%20agent";
 const bookingUrl = "https://calendly.com/use-hive/15-min";
+// Tagged so trial bookings are recognisable in Calendly.
+const trialBookingUrl = `${bookingUrl}?utm_source=usehive&utm_campaign=free-trial`;
 
 const builtOn = ["OpenAI Agents SDK", "Claude", "LangGraph", "MCP servers", "Vercel AI SDK", "CrewAI", "Custom stacks"];
 
@@ -175,9 +186,9 @@ const jsonLd = {
   ],
 };
 
-function PrimaryButton({ children }: { children: React.ReactNode }) {
+function PrimaryButton({ children, href = bookingUrl }: { children: React.ReactNode; href?: string }) {
   return (
-    <a className={styles.primaryButton} href={bookingUrl} target="_blank" rel="noopener noreferrer">
+    <a className={styles.primaryButton} href={href} target="_blank" rel="noopener noreferrer">
       {children} <ArrowRight size={17} aria-hidden="true" />
     </a>
   );
@@ -199,7 +210,14 @@ function Cell({ value }: { value: string | boolean }) {
   return <>{value}</>;
 }
 
-export default function AuditPage() {
+export default async function AuditPage({ searchParams }: PageProps) {
+  const trial = await isTrial(searchParams);
+  const booking = trial ? trialBookingUrl : bookingUrl;
+  const cta = trial ? "Claim your free audit" : "Book an audit";
+  const rows = trial ? comparison.map(r => r.row === "Cost" ? { ...r, hive: "Free for your team" } : r) : comparison;
+  const faqItems = trial
+    ? faqs.map(f => f.question === "How much does it cost?" ? { ...f, answer: "Your team's first audit is free. It's the same full audit, with no payment details needed. After that it's ₹4,999 per audit, flat." } : f)
+    : faqs;
   const reportPassed = reportCategories.reduce((sum, c) => sum + c.passed, 0);
   const reportTotal = reportCategories.reduce((sum, c) => sum + c.total, 0);
 
@@ -212,14 +230,15 @@ export default function AuditPage() {
           <main>
             {/* Hero */}
             <section className={styles.hero} aria-labelledby="audit-title">
+              {trial && <p className={styles.trialPill} data-hero><span aria-hidden="true" /> You&apos;re one of the teams we selected. Your first audit is free.</p>}
               <h1 id="audit-title" data-hero>We break your AI agent<br /><span>so your users never do.</span></h1>
               <p className={styles.heroCopy} data-hero>50+ real prompts and edge cases. We find the failures, repair what we can, and show you exactly what happened.</p>
               <div className={styles.heroActions} data-hero>
-                <PrimaryButton>Book an audit</PrimaryButton>
+                <PrimaryButton href={booking}>{cta}</PrimaryButton>
                 <a className={styles.secondaryButton} href="#report">See a sample report</a>
               </div>
               <ul className={styles.heroTrust} data-hero>
-                <li><Check size={15} aria-hidden="true" /> ₹4,999 flat price</li>
+                <li><Check size={15} aria-hidden="true" /> {trial ? "Free for your team" : "₹4,999 flat price"}</li>
                 <li><Check size={15} aria-hidden="true" /> NDA on request</li>
                 <li><Check size={15} aria-hidden="true" /> Repairs included</li>
               </ul>
@@ -350,7 +369,7 @@ export default function AuditPage() {
                       <tr><th scope="col"><span className="sr-only">Feature</span></th><th scope="col" className={styles.compareHive}>HIVE audit</th><th scope="col">Self-serve testing tools</th><th scope="col">Manual QA</th></tr>
                     </thead>
                     <tbody>
-                      {comparison.map(item => (
+                      {rows.map(item => (
                         <tr key={item.row}>
                           <th scope="row">{item.row}</th>
                           <td className={styles.compareHive}><Cell value={item.hive} /></td>
@@ -406,14 +425,17 @@ export default function AuditPage() {
                 <SectionHead kicker="Pricing" title={<span id="pricing-title">One audit. <em>The full picture.</em></span>} />
                 <div className={styles.priceCard} data-reveal>
                   <div className={styles.priceMain}>
-                    <span className={styles.priceBadge}>One flat price</span>
+                    <span className={trial ? `${styles.priceBadge} ${styles.priceBadgeTrial}` : styles.priceBadge}>{trial ? "Selected team · Free trial" : "One flat price"}</span>
                     <h3>Agent reliability audit</h3>
-                    <p className={styles.priceAmount}>
+                    {trial ? <p className={styles.priceAmount}>
+                      <span className={styles.priceOld}>₹4,999</span>
+                      <span className={styles.priceValue}>Free</span>
+                    </p> : <p className={styles.priceAmount}>
                       <span className={styles.priceValue}>₹4,999</span>
                       <span className={styles.pricePer}>/ audit</span>
-                    </p>
-                    <p className={styles.priceNote}>Everything below, for one agent or MCP server. Scope agreed before we start.</p>
-                    <PrimaryButton>Book an audit</PrimaryButton>
+                    </p>}
+                    <p className={styles.priceNote}>{trial ? "Your first audit is on us. Everything below, for one agent or MCP server, with no payment details needed." : "Everything below, for one agent or MCP server. Scope agreed before we start."}</p>
+                    <PrimaryButton href={booking}>{cta}</PrimaryButton>
                   </div>
                   <ul className={styles.included}>
                     <li><Check size={16} aria-hidden="true" />50+ real prompts and edge cases</li>
@@ -431,7 +453,7 @@ export default function AuditPage() {
             <section className={styles.section} aria-labelledby="faq-title">
               <div className={`${styles.container} ${styles.faqLayout}`}>
                 <SectionHead align="left" kicker="FAQ" title={<span id="faq-title">Straight answers.</span>} body="Anything else? Email pavan@usehive.tech and a founder will reply." />
-                <div data-reveal><AuditFaq items={faqs} /></div>
+                <div data-reveal><AuditFaq items={faqItems} /></div>
               </div>
             </section>
 
@@ -439,9 +461,9 @@ export default function AuditPage() {
             <section className={styles.ctaWrap} aria-labelledby="final-title">
               <div className={styles.cta} data-reveal>
                 <h2 id="final-title">Find the breaks<br />before your users do.</h2>
-                <p>₹4,999 per audit. Share access, and we&apos;ll take it from there.</p>
+                <p>{trial ? "Your first audit is free. Share access, and we'll take it from there." : "₹4,999 per audit. Share access, and we'll take it from there."}</p>
                 <div className={styles.heroActions}>
-                  <PrimaryButton>Book an audit</PrimaryButton>
+                  <PrimaryButton href={booking}>{cta}</PrimaryButton>
                   <a className={styles.ghostButton} href={auditEmail}>pavan@usehive.tech</a>
                 </div>
               </div>
