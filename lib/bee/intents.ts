@@ -119,6 +119,7 @@ export function localRoute(message: string): BeeAction | null {
   if (/\b(write|say|type)\b/.test(m) && parseText(message)) return done("write_text");
   if (/\b(move|align|shift|put|push)\b/.test(m) && /\b(button|cta|command|box|install)\b/.test(m) && parsePosition(message)) return done("move_button");
   if (/\b(scroll|go to|take me|jump)\b/.test(m) && parseSection(message)) return done("scroll_to");
-  if (/\b(background|bg|colou?r|theme|vibes?|make it|paint)\b/.test(m) && parseColor(message)) return done("set_background");
+  // Any message naming a colour or mood ("make backgrounddd gold", "what about pink") repaints, unless it targets something else.
+  if (parseColor(message) && !/\b(button|cta|box|install|text|write|say|scroll|game|play)\b/.test(m)) return done("set_background");
   return null;
 }

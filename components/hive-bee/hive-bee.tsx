@@ -133,7 +133,7 @@ export function HiveBee() {
     let action: BeeAction | null = localRoute(message);
     if (!action) {
       try {
-        const response = await fetch("/api/bee", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ message }) });
+        const response = await fetch("/api/bee", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ message, history: messages.slice(-6).map(m => ({ from: m.from, text: m.text })) }) });
         action = await response.json() as BeeAction;
         if (!response.ok || typeof action?.reply !== "string") throw new Error("Bad bee response");
       } catch {

@@ -75,7 +75,9 @@ const geminiTools = [{
 
 type GeminiPart = { text?: string; functionCall?: { name?: string; args?: Record<string, unknown> } };
 
-async function askGemini(message: string, only?: BeeTool | "none"): Promise<{ tool: BeeTool | null; args: BeeArgs; text: string } | null> {
+type Turn = { from: "you" | "bee"; text: string };
+
+async function askGemini(message: string, history: Turn[], only?: BeeTool | "none"): Promise<{ tool: BeeTool | null; args: BeeArgs; text: string } | null> {
   const key = process.env.GEMINI_API_KEY;
   if (!key) return null;
   const toolConfig = only === "none" ? { functionCallingConfig: { mode: "NONE" } }
@@ -87,7 +89,8 @@ async function askGemini(message: string, only?: BeeTool | "none"): Promise<{ to
       headers: { "x-goog-api-key": key, "Content-Type": "application/json" },
       body: JSON.stringify({
         systemInstruction: { parts: [{ text: PERSONA }] },
-        contents: [{ role: "user", parts: [{ text: message }] }],
+        // Recent turns give follow-ups like "what about pink" their context.
+        contents: [...history.map(turn => ({ role: turn.from === "you" ? "user" : "model", parts: [{ text: turn.text }] })), { role: "user", parts: [{ text: message }] }],
         tools: geminiTools,
         toolConfig,
         // Short replies don't need thinking, which would also eat the output budget.
@@ -133,9 +136,15 @@ function finish(tool: BeeTool, args: BeeArgs, via: BeeAction["via"]): BeeAction 
 
 export async function POST(request: NextRequest) {
   if (request.headers.get("origin") !== new URL(request.url).origin) return NextResponse.json({ error: "Invalid request origin." }, { status: 403 });
-  const body = await request.json().catch(() => ({})) as { message?: unknown };
+  const body = await request.json().catch(() => ({})) as { message?: unknown; history?: unknown };
   const message = typeof body.message === "string" ? body.message.trim().slice(0, 300) : "";
   if (!message) return NextResponse.json({ error: "Say something to the bee." }, { status: 400 });
+  const turns = (Array.isArray(body.history) ? body.history : [])
+    .filter((t): t is Turn => !!t && (t.from === "you" || t.from === "bee") && typeof t.text === "string")
+    .slice(-6)
+    .map(t => ({ from: t.from, text: t.text.slice(0, 300) }));
+  // Gemini expects the conversation to start with the user.
+  const history = turns.slice(turns.findIndex(t => t.from === "you") >= 0 ? turns.findIndex(t => t.from === "you") : turns.length);
 
   const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "local";
   if (limited(ip)) return NextResponse.json({ tool: null, args: {}, reply: "Bzz… I'm out of breath. Give me a little while and ask again.", via: "fallback" } satisfies BeeAction);
@@ -143,18 +152,18 @@ export async function POST(request: NextRequest) {
   // 1. Jev decides which tool, cheaply. 2. Gemini fills in missing details or writes the tease.
   const choice = await askJev(message);
   if (choice === "not_possible") {
-    const gemini = await askGemini(message, "none");
+    const gemini = await askGemini(message, history, "none");
     return NextResponse.json({ tool: null, args: {}, reply: gemini?.text || randomTease(), via: gemini?.text ? "gemini" : "jev" } satisfies BeeAction);
   }
   if (choice) {
     const args = argsFor(choice, message);
     if (!needsArgs(choice, args)) return NextResponse.json(finish(choice, args, "jev"));
-    const gemini = await askGemini(message, choice);
+    const gemini = await askGemini(message, history, choice);
     return NextResponse.json(finish(choice, gemini?.tool === choice ? { ...args, ...gemini.args } : args, gemini ? "gemini" : "jev"));
   }
 
   // No Jev: Gemini decides on its own.
-  const gemini = await askGemini(message);
+  const gemini = await askGemini(message, history);
   if (gemini?.tool) return NextResponse.json(finish(gemini.tool, gemini.args, "gemini"));
   if (gemini?.text) return NextResponse.json({ tool: null, args: {}, reply: gemini.text, via: "gemini" } satisfies BeeAction);
   return NextResponse.json({ tool: null, args: {}, reply: randomTease(), via: "fallback" } satisfies BeeAction);
