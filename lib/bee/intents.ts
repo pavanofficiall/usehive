@@ -28,7 +28,15 @@ export const BACKGROUND_PRESETS: Record<string, string> = {
   sky: "",
 };
 
-const COLOR_WORDS = ["red", "orange", "yellow", "green", "blue", "purple", "violet", "pink", "black", "white", "gray", "grey", "teal", "cyan", "magenta", "gold", "lavender", "coral", "mint", "navy", "beige", "brown"];
+const COLOR_WORDS = ["red", "orange", "yellow", "green", "blue", "purple", "violet", "pink", "black", "white", "gray", "grey", "teal", "cyan", "magenta", "gold", "lavender", "coral", "mint", "navy", "beige", "brown", "silver", "maroon", "crimson", "indigo", "turquoise", "lime", "olive", "peach", "salmon", "khaki", "plum", "orchid", "tomato", "chocolate", "aqua", "skyblue", "hotpink", "tan", "ivory"];
+
+// Everyday words mapped to a colour or preset ("golden" -> gold).
+const COLOR_ALIASES: Record<string, string> = {
+  golden: "gold", goldish: "gold", reddish: "red", bluish: "blue", greenish: "green", pinkish: "pink", purplish: "purple",
+  rose: "pink", rosy: "pink", blush: "pink", lilac: "lavender", mauve: "plum", emerald: "green", ruby: "crimson",
+  sapphire: "blue", amber: "orange", lemon: "yellow", sunny: "yellow", dark: "night", midnight: "night", beach: "ocean",
+  sea: "ocean", water: "ocean", jungle: "forest", nature: "forest", sweet: "candy", pastel: "candy", warm: "sunset", sunrise: "sunset",
+};
 
 const TEASES = [
   "Bzzt. What are your expectations from a bee the size of a raisin? Try \"make it sunset\" or \"throw confetti\".",
@@ -47,6 +55,7 @@ export function parseColor(message: string): string | null {
   const hex = lower.match(/#[0-9a-f]{3}(?:[0-9a-f]{3})?\b/);
   if (hex) return hex[0];
   for (const word of COLOR_WORDS) if (new RegExp(`\\b${word}\\b`).test(lower)) return word === "grey" ? "gray" : word;
+  for (const [word, color] of Object.entries(COLOR_ALIASES)) if (new RegExp(`\\b${word}\\b`).test(lower)) return color;
   return null;
 }
 
