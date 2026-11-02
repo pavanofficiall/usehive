@@ -5,6 +5,13 @@
 }
 .bee canvas { display: block; width: 100%; height: 100%; image-rendering: pixelated; filter: drop-shadow(0 6px 10px #0b1a3540); }
 .bee:focus-visible { outline: 2px solid #7ff0ff; outline-offset: 2px; border-radius: 12px; }
+.dismiss {
+  position: fixed; top: 0; left: 0; z-index: 2147482001;
+  display: grid; place-items: center; width: 20px; height: 20px; padding: 0;
+  border: 2px solid #141633; border-radius: 50%; background: #fff; color: #141633; cursor: pointer;
+  opacity: .55; transition: opacity .15s, background .15s; will-change: transform;
+}
+.dismiss:hover, .dismiss:focus-visible { opacity: 1; background: #ffcc3d; }
 .teaser {
   position: absolute; right: 70%; bottom: 88%; width: max-content; max-width: 200px;
   padding: 8px 12px; border: 2px solid #141633; border-radius: 12px 12px 2px 12px;

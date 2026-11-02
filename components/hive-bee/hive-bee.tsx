@@ -12,6 +12,15 @@ const SUGGESTIONS = ["Make it sunset", "Throw confetti", "Move the button left",
 
 type Message = { from: "you" | "bee"; text: string; call?: { label: string; ok: boolean }; booking?: boolean };
 
+const BYE_LINES = [
+  "Fine. I know when I'm not wanted. 🐝💔",
+  "Rude! I'm telling the queen about this.",
+  "Okay okay, buzzing off. Dramatically.",
+  "You'll miss me when the page is boring again.",
+];
+
+const byeLine = () => BYE_LINES[Math.floor(Math.random() * BYE_LINES.length)];
+
 export function HiveBee() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const beeRef = useRef<HTMLButtonElement>(null);
@@ -20,6 +29,11 @@ export function HiveBee() {
   const motion = useRef({ x: 0, y: 0, tx: 0, ty: 0, flip: false, nextWander: 0, size: 102, arrived: null as null | (() => void) });
   const faceRef = useRef<BeeFace>("idle");
   const openRef = useRef(false);
+  const dismissBtnRef = useRef<HTMLButtonElement>(null);
+  const leavingRef = useRef(false);
+  const [say, setSay] = useState<string | null>(null);
+  const [gone, setGone] = useState(false);
+  const [leaving, setLeaving] = useState(false);
   const [ready, setReady] = useState(false);
   const [open, setOpen] = useState(false);
   const [teaser, setTeaser] = useState(false);
@@ -74,7 +88,7 @@ export function HiveBee() {
           m.tx = Math.max(8, panel.left + 14);
           m.ty = Math.max(8, panel.top - m.size * 0.82);
         }
-      } else if (!reduced && !m.arrived && now > m.nextWander) wander(now);
+      } else if (!reduced && !m.arrived && !leavingRef.current && now > m.nextWander) wander(now);
       const dx = m.tx - m.x;
       const dy = m.ty - m.y;
       const distance = Math.hypot(dx, dy);
@@ -88,6 +102,7 @@ export function HiveBee() {
       if (m.arrived && distance < 6) { const done = m.arrived; m.arrived = null; done(); }
       const bee = beeRef.current!;
       bee.style.transform = `translate3d(${Math.round(m.x)}px,${Math.round(m.y)}px,0)`;
+      if (dismissBtnRef.current) dismissBtnRef.current.style.transform = `translate3d(${Math.round(m.x + m.size - 14)}px,${Math.round(m.y - 4)}px,0)`;
       draw(now, faceRef.current, { flip: m.flip, flapSpeed: distance > 4 ? 24 : 14, still: reduced });
       frame = requestAnimationFrame(loop);
     };
@@ -114,6 +129,46 @@ export function HiveBee() {
       const timeout = window.setTimeout(() => { m.arrived = null; resolve(); }, 1400);
       m.arrived = () => { window.clearTimeout(timeout); resolve(); };
     });
+  }
+
+  /** Fly to a point, which may be off screen. */
+  function flyToPoint(x: number, y: number) {
+    return new Promise<void>(resolve => {
+      const m = motion.current;
+      m.tx = x;
+      m.ty = y;
+      const timeout = window.setTimeout(() => { m.arrived = null; resolve(); }, 3500);
+      m.arrived = () => { window.clearTimeout(timeout); resolve(); };
+    });
+  }
+
+  const wait = (ms: number) => new Promise(resolve => window.setTimeout(resolve, ms));
+
+  async function dismiss() {
+    if (leavingRef.current) return;
+    leavingRef.current = true;
+    setLeaving(true);
+    setOpen(false);
+    setTeaser(false);
+    const m = motion.current;
+    const offRight = window.innerWidth + m.size + 40;
+    const restY = Math.max(90, window.innerHeight * 0.35);
+    setFace("surprised");
+    setSay(byeLine());
+    await wait(1600);
+    setSay(null);
+    setFace("smirk");
+    await flyToPoint(offRight, m.y - 120);
+    await wait(1400);
+    m.x = offRight;
+    m.y = restY;
+    await flyToPoint(window.innerWidth - m.size - 40, restY);
+    setFace("happy");
+    setSay("Kidding, I'm not mad. Reload the page and I'll be right back here. Bzz!");
+    await wait(2800);
+    setSay(null);
+    await flyToPoint(offRight, restY - 160);
+    setGone(true);
   }
 
   function setFace(face: BeeFace, ms?: number) {
@@ -161,13 +216,14 @@ export function HiveBee() {
     void ask(input);
   }
 
-  if (!ready) return null;
+  if (!ready || gone) return null;
   return <>
     <button ref={beeRef} type="button" className={styles.bee} aria-label={open ? "Close the HIVE bee chat" : "Chat with the HIVE bee"} aria-expanded={open}
       onClick={() => { setOpen(value => !value); setTeaser(false); }}>
       <canvas ref={canvasRef} width={204} height={204} />
-      {teaser && !open && <span className={styles.teaser}>Psst… I can change this page</span>}
+      {say ? <span className={styles.teaser} key={say}>{say}</span> : teaser && !open && <span className={styles.teaser}>Psst… I can change this page</span>}
     </button>
+    {!leaving && <button ref={dismissBtnRef} type="button" className={styles.dismiss} aria-label="Send the bee away" title="Send the bee away" onClick={() => void dismiss()}><X size={12} strokeWidth={3} /></button>}
 
     {open && <section ref={panelRef} className={styles.panel} aria-label="HIVE bee chat">
       <header className={styles.head}>
