@@ -25,7 +25,7 @@ export const metadata: Metadata = {
 // The audit page never shows it.
 const introBlocker = `(function(){
   var seen=false;
-  try{seen=sessionStorage.getItem('hive:intro-seen')==='true';}catch(e){}
+  try{seen=localStorage.getItem('hive:intro-seen')==='true';}catch(e){}
   var reduced=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var path=location.pathname;
   var audit=path==='/audit'||path.indexOf('/audit/')===0;

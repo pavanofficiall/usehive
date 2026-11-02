@@ -28,13 +28,13 @@ export function SiteEffects() {
   const finishTyping = useCallback(() => setTyped(true), []);
   useEffect(() => {
     if (phase !== "loading" || !assetsReady || !typed) return;
-    const hold = window.setTimeout(() => setPhase("leaving"), 2000);
+    const hold = window.setTimeout(() => setPhase("leaving"), 700);
     return () => window.clearTimeout(hold);
   }, [assetsReady, typed, phase]);
 
   useEffect(() => {
     let seen = false;
-    try { seen = sessionStorage.getItem(INTRO_SEEN_KEY) === "true"; } catch { /* Storage can be unavailable in private browsers. */ }
+    try { seen = localStorage.getItem(INTRO_SEEN_KEY) === "true"; } catch { /* Storage can be unavailable in private browsers. */ }
     const audit = /^\/audit(\/|$)/.test(window.location.pathname);
     if (seen || audit || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       delete document.documentElement.dataset.hiveIntro;
@@ -48,8 +48,8 @@ export function SiteEffects() {
     const previousOverflow = document.documentElement.style.overflow;
     document.documentElement.style.overflow = "hidden";
     document.documentElement.dataset.hiveIntroReady = "false";
-    const minimum = new Promise<void>(resolve => window.setTimeout(resolve, 650));
-    const maximum = new Promise<void>(resolve => window.setTimeout(resolve, 2400));
+    const minimum = new Promise<void>(resolve => window.setTimeout(resolve, 300));
+    const maximum = new Promise<void>(resolve => window.setTimeout(resolve, 1500));
     const assets = Promise.all([loadImage("/blue-sky.webp"), loadImage("/hive-demo-poster.jpg"), document.fonts.ready]);
     Promise.race([Promise.all([minimum, assets]), maximum]).then(() => {
       if (!cancelled) setAssetsReady(true);
@@ -69,7 +69,7 @@ export function SiteEffects() {
 
   useEffect(() => {
     if (phase !== "leaving") return;
-    try { sessionStorage.setItem(INTRO_SEEN_KEY, "true"); } catch { /* Continue when browser storage is blocked. */ }
+    try { localStorage.setItem(INTRO_SEEN_KEY, "true"); } catch { /* Continue when browser storage is blocked. */ }
     const readyTimer = window.setTimeout(() => {
       document.documentElement.dataset.hiveIntroReady = "true";
       window.dispatchEvent(new Event("hive:intro-ready"));
@@ -100,7 +100,7 @@ export function SiteEffects() {
   if (phase === "checking" || phase === "done") return null;
   return <div className={phase === "leaving" ? "intro-loader leaving" : "intro-loader"} role="status" aria-label="Loading HIVE">
     <div className="intro-tagline" aria-label="On a mission to change human web into agentic.">
-      <TextType text="On a mission to change human web into agentic." typingSpeed={55} initialDelay={50} loop={false} cursorCharacter="▏" onSentenceComplete={finishTyping} aria-hidden="true"/>
+      <TextType text="On a mission to change human web into agentic." typingSpeed={30} initialDelay={50} loop={false} cursorCharacter="▏" onSentenceComplete={finishTyping} aria-hidden="true"/>
     </div>
   </div>;
 }
