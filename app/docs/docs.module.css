@@ -62,7 +62,7 @@
 .searchField button{border:0;background:transparent;color:var(--soft);cursor:pointer}
 .searchResults{max-height:calc(65vh - 55px);overflow:auto;padding:9px}
 .searchResults a{display:grid;gap:4px;padding:12px;border-radius:7px;color:var(--text);font-size:13px}
-.searchResults a:hover{background:var(--hover)}
+.searchResults a:hover,.searchResults a[data-active]{background:var(--hover)}
 .searchResults a span,.searchResults p{color:var(--soft);font-size:12px}
 .searchResults p{margin:16px 12px}
 @media(max-width:1080px){.layout{grid-template-columns:220px minmax(0,1fr)}.toc{display:none}.article{max-width:850px}}
