@@ -92,7 +92,7 @@ export function HiveBee() {
       const dx = m.tx - m.x;
       const dy = m.ty - m.y;
       const distance = Math.hypot(dx, dy);
-      const speed = m.arrived ? 520 : 150;
+      const speed = m.arrived ? (leavingRef.current ? 340 : 520) : 150;
       if (distance > 1) {
         const step = Math.min(distance, speed * dt);
         m.x += (dx / distance) * step;
@@ -143,6 +143,8 @@ export function HiveBee() {
   }
 
   const wait = (ms: number) => new Promise(resolve => window.setTimeout(resolve, ms));
+  // Long enough to read comfortably: about 75ms per character, never under 3 seconds.
+  const readTime = (text: string) => Math.max(3000, text.length * 75);
 
   async function dismiss() {
     if (leavingRef.current) return;
@@ -154,18 +156,20 @@ export function HiveBee() {
     const offRight = window.innerWidth + m.size + 40;
     const restY = Math.max(90, window.innerHeight * 0.35);
     setFace("surprised");
-    setSay(byeLine());
-    await wait(1600);
+    const bye = byeLine();
+    setSay(bye);
+    await wait(readTime(bye));
     setSay(null);
     setFace("smirk");
     await flyToPoint(offRight, m.y - 120);
-    await wait(1400);
+    await wait(2000);
     m.x = offRight;
     m.y = restY;
     await flyToPoint(window.innerWidth - m.size - 40, restY);
     setFace("happy");
-    setSay("Kidding, I'm not mad. Reload the page and I'll be right back here. Bzz!");
-    await wait(2800);
+    const back = "Kidding, I'm not mad. Reload the page and I'll be right back here. Bzz!";
+    setSay(back);
+    await wait(readTime(back));
     setSay(null);
     await flyToPoint(offRight, restY - 160);
     setGone(true);
