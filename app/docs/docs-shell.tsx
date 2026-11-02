@@ -156,6 +156,16 @@ export const toc: Record<string, readonly Heading[]> = {
     { id: "remote", title: "Remote access", keywords: "remote tunnel HIVE_ALLOWED_HOSTS HIVE_ALLOWED_ORIGINS ngrok" },
     { id: "check", title: "Check the setup", keywords: "doctor check network debug troubleshoot" },
   ],
+  vercel: [
+    { id: "overview", title: "How it works", keywords: "vercel host hosting overview function" },
+    { id: "before", title: "Before you deploy", keywords: "requirements live app api key bearer cookie credential" },
+    { id: "deploy", title: "Deploy", keywords: "deploy app-url vercel login checks verify" },
+    { id: "link", title: "Your secret link", keywords: "secret link url rotate-key leak" },
+    { id: "claude", title: "Connect Claude", keywords: "claude connector no sign-in team enterprise" },
+    { id: "chatgpt", title: "Connect ChatGPT", keywords: "chatgpt openai custom mcp server no authentication" },
+    { id: "update", title: "Keep it up to date", keywords: "redeploy sync update policy project" },
+    { id: "limits", title: "Limits", keywords: "limits hobby pro oauth logs pricing" },
+  ],
   commands: [
     { id: "usage", title: "Run a command", keywords: "usage npx hive run" },
     { id: "reference", title: "Command reference", keywords: "commands scan install sync check tools enable disable mode logs inspect dev stdio doctor deploy rotate-key project json select" },

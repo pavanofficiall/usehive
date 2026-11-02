@@ -4,12 +4,13 @@
 
 ## When to use HIVE
 
-Use HIVE when you maintain a TypeScript Next.js App Router application and want to scan its existing API capabilities, review generated MCP tools, and run a local MCP server. Re-scan after your application changes. The current beta generates a local, single-user server; it does not provide a hosted MCP endpoint or production OAuth.
+Use HIVE when you maintain a TypeScript Next.js App Router application and want to scan its existing API capabilities, review generated MCP tools, and run an MCP server locally or host it on your own Vercel account for Claude and ChatGPT. Re-scan after your application changes with `sync`. Hosted servers use a shared secret link; per-user OAuth is not supported yet.
 
 ## Start here
 
 - [Documentation](https://www.usehive.tech/docs)
 - [Configuration](https://www.usehive.tech/docs/configuration)
+- [Deploy on Vercel](https://www.usehive.tech/docs/vercel)
 - [CLI commands](https://www.usehive.tech/docs/commands)
 - [Agent reliability audit](https://www.usehive.tech/audit)
 - [Official npm package](https://www.npmjs.com/package/@usehive/cli)
@@ -21,4 +22,4 @@ Run from the root of a supported app with Node.js 22.12 or newer:
 npx @usehive/cli scan --install
 ```
 
-Review discovered capabilities before approving write or destructive tools. Follow the documentation to configure the generated server and connect a local MCP client.
+Review discovered capabilities before approving write or destructive tools. Follow the documentation to configure the generated server and connect a local MCP client, or run `npx @usehive/cli deploy --app-url <url>` to host it on Vercel.

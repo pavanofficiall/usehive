@@ -16,6 +16,6 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
 
 export default async function DocsSectionPage({ params }: Params) {
   const { slug } = await params;
-  if (slug !== "configuration" && slug !== "commands") notFound();
+  if (slug !== "configuration" && slug !== "vercel" && slug !== "commands") notFound();
   return <DocsPage slug={slug} />;
 }
